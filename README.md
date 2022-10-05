@@ -1,6 +1,6 @@
 # smarter-home
 
-CS3500 semester project: smart home control system
+A smart home control system designed for CS3500: Software Engineering 
 
 ## Outline
 
