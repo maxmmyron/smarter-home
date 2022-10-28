@@ -2,7 +2,7 @@
 # checks for event requests from users or schedule breakpoints
 import time
 
-# running total of time running, in ms.
+# total of time running from start of loop
 _runtime = 0
 
 # delta time in ms. specifies delay between loop calls.
@@ -13,10 +13,15 @@ _delta = 16
 def loop():
     _runtime += _delta
 
+    # TODO: implement state update logic
+
 
 # primary system function. handles init of system. akin to "turn on" event.
 def sys():
+    # init system
     _is_running = True
+
+    # TODO: implement state init logic
 
     while _is_running:
         loop()
