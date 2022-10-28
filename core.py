@@ -2,6 +2,8 @@
 # checks for event requests from users or schedule breakpoints
 import time
 
+import graphman
+
 # total of time running from start of loop
 _runtime = 0
 
