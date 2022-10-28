@@ -1,12 +1,9 @@
 # primary loop function. Runs once per second and
 # checks for event requests from users or schedule breakpoints
-from os import wait
-
 runtime = 0
 
+
 # primary loop function
-
-
 def loop(delta):
     runtime += delta
 
