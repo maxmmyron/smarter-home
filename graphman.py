@@ -1,2 +1,2 @@
 def init():
-    graphing = True
+    _is_graphing = True
