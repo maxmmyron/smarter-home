@@ -17,19 +17,19 @@ _delta = 500
 # 1 - "update"
 sys_state = 0
 
+
 # primary loop functionq
-
-
 def loop():
     global _runtime
     _runtime += _delta
     print("running: time elapsed: " + str(_runtime))
+
+    # TODO: implement state update logic
+
     if sys_state:
         print("updating sys state")
     else:
         print("system idling")
-
-    # TODO: implement state update logic
 
 
 # primary system function. handles init of system. akin to "turning on" smart home.
