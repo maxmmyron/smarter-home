@@ -25,12 +25,12 @@ schedule = [[], []]
 # house state is a dictionary of all devices in the house
 house_state = {
     "living_room": {
-        "lights": 0,
-        "temperature": 0,
+        "lights": 1.0,
+        "temperature": 22,
     },
     "kitchen": {
-        "lights": 0,
-        "temperature": 0,
+        "lights": 0.75,
+        "temperature": 22,
     },
 }
 
