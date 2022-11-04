@@ -17,6 +17,23 @@ _delta = 500
 # 1 - "update"
 sys_state = 0
 
+# schedule is a double array where:
+# schedule[0] = time in ms
+# schedule[1] = house state to set at paired time
+schedule = [[], []]
+
+# house state is a dictionary of all devices in the house
+house_state = {
+    "living_room": {
+        "lights": 0,
+        "temperature": 0,
+    },
+    "kitchen": {
+        "lights": 0,
+        "temperature": 0,
+    },
+}
+
 
 # primary loop functionq
 def loop():
