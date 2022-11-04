@@ -22,6 +22,16 @@ sys_state = 0
 # schedule[1] = house state to set at paired time
 schedule = [[], []]
 
+# represent users as an array where a user is:
+# user.id = user id
+# user.is_admin = whether or not user has admin privileges
+users = [
+    {id: 0, "is_admin": True},
+    {id: 1, "is_admin": False},
+    {id: 2, "is_admin": False},
+    {id: 3, "is_admin": False},
+]
+
 # house state is a dictionary of all devices in the house
 house_state = {
     "living_room": {
