@@ -7,10 +7,10 @@ import time
 import keyboard
 
 # total of time running from start of loop
-_runtime = 0
+runtime = 0
 
 # delta time in ms. specifies delay between loop calls.
-_delta = 500
+delta = 500
 
 # system state. tracks whether or not system is currently idling or updating home state.
 # 0 - "idle"
@@ -18,9 +18,23 @@ _delta = 500
 sys_state = 0
 
 # schedule is a double array where:
-# schedule[0] = time in ms
-# schedule[1] = house state to set at paired time
-schedule = [[], []]
+# schedule[0] = times in ms
+# schedule[1] = house states to set at paired time
+schedule = [
+    [10000],
+    [
+        {
+            "living_room": {
+                "light": 0,
+                "temprature": 21,
+            },
+            "kitchen": {
+                "light": 1,
+                "temprature": 24,
+            }
+        }
+    ]
+]
 
 # represent users as an array where a user is:
 # user.id = user id
@@ -35,26 +49,47 @@ users = [
 # house state is a dictionary of all devices in the house
 house_state = {
     "living_room": {
-        "lights": 1.0,
-        "temperature": 22,
+        "lights": 1,
+        "temperature": 24,
     },
     "kitchen": {
-        "lights": 0.75,
+        "lights": 0,
         "temperature": 22,
     },
 }
 
+# the target state that the system will attempt to reach
+target_state = None
 
 # primary loop functionq
-def loop():
-    global _runtime
-    _runtime += _delta
-    print("running: time elapsed: " + str(_runtime))
 
-    # TODO: implement state update logic
+
+def loop():
+    # declare global variables
+    global runtime
+    global sys_state
+    global target_state
+
+    # update runtime by delta
+    runtime += delta
+
+    # get times and schedules
+    times = schedule[0]
+    schedules = schedule[1]
+
+    # check if current time is in schedule struct, and if so, set target state.
+    for i in range(len(times)):
+        if times[i] <= runtime:
+            target_state = schedules[i]
+            # update system state to "update"
+            sys_state = 1
 
     if sys_state:
-        print("updating sys state")
+        # if the target state and current state equal, set system state to "idle"
+        if target_state == house_state:
+            sys_state = 0
+        else:
+            print("updating home state")
     else:
         print("system idling")
 
@@ -68,7 +103,7 @@ def sys_init():
 
     while _is_running:
         loop()
-        time.sleep(_delta / 1000)
+        time.sleep(delta / 1000)
         # read for q input to exit
         if keyboard.is_pressed('q'):
             _is_running = False
