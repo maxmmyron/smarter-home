@@ -26,11 +26,11 @@ schedule = [
         {
             "living_room": {
                 "light": 0,
-                "temprature": 21,
+                "temperature": 21,
             },
             "kitchen": {
                 "light": 1,
-                "temprature": 24,
+                "temperature": 24,
             }
         }
     ]
