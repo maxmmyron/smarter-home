@@ -61,7 +61,7 @@ house_state = {
 # the target state that the system will attempt to reach
 target_state = None
 
-# primary loop functionq
+# primary loop function
 
 
 def loop():
