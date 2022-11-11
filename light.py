@@ -5,7 +5,6 @@ class homeObject:
     def __init__(self, id):
         self._state = 0
         self._id = id
-        self._tempDelta = 5
         self._energyUse = 100
 
     def changeState(self):
