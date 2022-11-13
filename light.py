@@ -24,3 +24,16 @@ class light(homeObject):
        an id.'''
     pass
 
+'''
+class light():
+    def __init__(self,id,state):
+        self._id = id
+        self._state = state
+
+    def changeState(self,state):
+        self._state = state
+
+    def returnState(self):
+        return self._state
+ '''
+    
