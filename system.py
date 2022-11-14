@@ -26,19 +26,10 @@ def sys_init(list):
                 print("Current State:" , x1.returnState())
             # set state
             elif options == "2":
-                while True:
-                    set = input("Set you state (0/1)：")
-                    if set == "0":
-                        x1.changeState(0)
-                        print("Light is Off.")
-                        break
-                    elif set=="1":
-                        x1.changeState(1)
-                        print("Light is on.")
-                        break
-                    else:
-                        print("Wrong number, please try again.")
-                        False
+                x1.changeState()
+                print("State change")
+                break
+                
         # Temp system
         elif option == "2":
             sysChoice = input("Please make your choice:1(Heater)/2(Airconditioner):")
