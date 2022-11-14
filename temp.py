@@ -13,14 +13,19 @@ class thermometer(homeObject):
     def returnCurrentTemp(self):
         return self._temp
 
-class heater(homeObject):
+    def setTemp(self, temp):
+        self._temp = temp
+
+
+class heater(thermometer):
     '''Class for creating objects that represent heaters in 
        the home.
        Each thermometer has a variable to track its state (on or off)
        and an id.'''
     pass
 
-class airConditioner(homeObject):
+
+class airConditioner(thermometer):
     '''Class for creating objects that represent air conditioners in 
        the home.
        Each thermometer has a variable to track its state (on or off)
