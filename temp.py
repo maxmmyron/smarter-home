@@ -26,3 +26,44 @@ class airConditioner(homeObject):
        Each thermometer has a variable to track its state (on or off)
        and an id.'''
     pass
+
+'''
+class heater(homeObject):
+    def __init__(self,id,state,temp):
+        homeObject.__init__(self,id)
+        self._temp = temp
+        self._state = state
+
+    def changeState(self,state):
+        self._state = state
+        
+    def returnState(self):
+        return super().returnState()
+    
+    def setTemp(self,temp):
+        self._temp = temp
+    
+    def getTemp(self):
+        return self._temp
+
+        
+        
+class airConditioner(homeObject):
+    def __init__(self,id,state,temp):
+        homeObject.__init__(self,id)
+        self._temp = temp
+        self._state = state
+
+    def changeState(self,state):
+        self._state = state
+        
+    def returnState(self):
+        return super().returnState()
+    
+    def setTemp(self,temp):
+        self._temp = temp
+    
+    def getTemp(self):
+        return self._temp
+
+'''
