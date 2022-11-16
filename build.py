@@ -1,4 +1,4 @@
-from GetterAndSetter import *
+from homeObject import *
 from sys import *
 x1 = light(1,0)
 x2 = heater(2,0,25)
