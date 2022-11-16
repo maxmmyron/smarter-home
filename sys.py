@@ -1,4 +1,4 @@
-from GetterAndSetter import * 
+from homeObject import * 
 from build import *
 
 
