@@ -1,16 +1,11 @@
 from tkinter import *
 from system import sys_init
 from light import * 
-from temp import *
 
-SittingRoomLight = light(1) 
-sitting_room_heating = heater(2)
-sitting_room_ac = airConditioner(3)
-sitting_room_thermometer = thermometer(4)
+sitting_room_light = light(1) 
+sitting_room_thermometer = thermometer(2)
 
-kitchen_light = light(5)
-
-homeObjectList = [SittingRoomLight, sitting_room_heating, sitting_room_ac, sitting_room_thermometer, "Sitting Room"]
+homeObjectList = [sitting_room_light, sitting_room_thermometer, "Sitting Room"]
 
 def graphics():
     my_window = Tk()
@@ -19,7 +14,7 @@ def graphics():
 
     my_canvas = Canvas(my_window, width=500, height=500, bg="white")
     #sitting room lights
-    if SittingRoomLight._state == 1:
+    if sitting_room_light._state == 1:
         #my_canvas.create_rectangle(x1, y1, x2, y2, fill="color") 
         my_canvas.create_rectangle(100, 100, 300, 300, tag="light", fill="yellow")
     else:
@@ -30,7 +25,7 @@ def graphics():
         sys_init(homeObjectList)
         print("done")
         my_canvas.delete("light")
-        if SittingRoomLight._state == 1:
+        if sitting_room_light._state == 1:
             my_canvas.create_rectangle(100, 100, 300, 300, tag="light", fill="yellow")
         else:
             my_canvas.create_rectangle(100, 100, 300, 300, tag="light", fill="cyan")

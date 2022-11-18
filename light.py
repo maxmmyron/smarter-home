@@ -24,3 +24,18 @@ class light(homeObject):
        an id.'''
     pass
 
+class thermometer(homeObject):
+    '''Class for creating objects that represent thermometers in 
+       the home.
+       Each thermometer has a variable to track its current temperature
+       and an id.'''
+
+    def __init__(self, id):
+        super().__init__(id)
+        self._temp = 0
+
+    def returnTemp(self):
+        return self._temp
+
+    def setTemp(self, temp):
+        self._temp = temp
