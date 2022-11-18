@@ -12,6 +12,8 @@ class Room(Home):
         self.temperature = 21
         self.lights = 0
 
+    def update_temperature(self, target_temperature):
+
 
 home = Home()
 
