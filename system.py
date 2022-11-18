@@ -7,14 +7,13 @@ def sys_init(list):
     light = list[0]
     thermometer = list[1]
     roomName = list[2]
-
-    
+ 
     print("-------------------------------------------------------")
     print(" Welcome to the America Moth Smart Home control System")
     while _is_running:
         print("-------------------------------------------------------")
         print("1. Light System. 2. Temperature System.")
-        option = input("Please select your options:")
+        option = input("Please select your options: ")
         # Light System
         if option == "1":
             if light.returnState() == 0:
