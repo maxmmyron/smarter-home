@@ -6,6 +6,8 @@
 import time
 import keyboard
 
+import unittest
+
 
 # total of time running from start of loop
 runtime = 0
