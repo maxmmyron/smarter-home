@@ -1,4 +1,4 @@
-from light import * 
+from homeObjects import * 
 
 def sys_init(list):
     # init system
@@ -35,10 +35,10 @@ def sys_init(list):
             print(roomName + " temperature is currently " + str(thermometer.returnTemp()) + ", would you like to change?")
             check = input("(Y/N): ")
             if check =="Y" or check == "y":
-                setTemp = input("Please input the Temperature you want to set:")
-                if setTemp>="0" and setTemp<="28":
-                    thermometer.setTemp(int(setTemp))
-                    print("You have successfully set the temperature to ", setTemp)
+                setT = input("Please input the Temperature you want to set:")
+                if setT >="0" and setT<="28":
+                    thermometer.setTemp(int(setT))
+                    print("You have successfully set the temperature to ", setT)
                 else:
                     print("Invalid, please try again.")
                 break

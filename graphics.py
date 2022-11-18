@@ -32,14 +32,14 @@ def graphics():
         my_canvas.delete("label")
         my_canvas.create_text(200,150, text="Sitting Room", tag="label", fill="black", font=('Helvetica 15 bold'))
         my_canvas.delete("temp")
-        my_canvas.create_text(200,220, text=str(sitting_room_thermometer._temp), tag="temp", fill="red", font=('Helvetica 15 bold'))
+        my_canvas.create_text(200,220, text=str(sitting_room_thermometer.returnTemp()), tag="temp", fill="red", font=('Helvetica 15 bold'))
 
     b = Button(my_window, text="Input", command=tempIncrease)
     b.pack()
 
     #sitting room lable
     my_canvas.create_text(200,150, text="Sitting Room", tag="label", fill="black", font=('Helvetica 15 bold'))
-    my_canvas.create_text(200,220, text=str(sitting_room_thermometer._temp), tags="temp", fill="red", font=('Helvetica 15 bold'))
+    my_canvas.create_text(200,220, text=str(sitting_room_thermometer.returnTemp()), tags="temp", fill="red", font=('Helvetica 15 bold'))
     my_canvas.pack()   
     my_window.mainloop()
 
