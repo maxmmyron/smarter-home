@@ -12,6 +12,7 @@ class homeObject:
             self._state = 1
         else:
             self._state = 0
+        return self._state
 
     def returnState(self):
         return self._state

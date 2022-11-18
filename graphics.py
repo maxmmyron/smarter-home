@@ -10,7 +10,7 @@ sitting_room_thermometer = thermometer(4)
 
 kitchen_light = light(5)
 
-homeObjectList = [SittingRoomLight, sitting_room_heating, sitting_room_ac, sitting_room_thermometer]
+homeObjectList = [SittingRoomLight, sitting_room_heating, sitting_room_ac, sitting_room_thermometer, "Sitting Room"]
 
 def graphics():
     my_window = Tk()

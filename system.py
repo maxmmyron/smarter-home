@@ -5,10 +5,11 @@ def sys_init(list):
     # init system
     _is_running = True
 
-    x1 = list[0]
-    x2 = list[2]
-    x3 = list[1]
-    x4 = list[3]
+    light = list[0]
+    heater = list[1]
+    ac = list[2] 
+    thermometer = list[3]
+    roomName = list[4]
 
     
     print("-------------------------------------------------------")
@@ -19,15 +20,18 @@ def sys_init(list):
         option = input("Please select your options:")
         # Light System
         if option == "1":
-            print("1. returnState. 2. changeState")
-            options = input("Select Function:")
-            # return state
-            if options == "1":
-                print("Current State:" , x1.returnState())
-            # set state
-            elif options == "2":
-                x1.changeState()
-                print("State change")
+            if light.returnState() == 0:
+                print(roomName + " light is currently off, would you like to turn it off?")
+            else: 
+                print(roomName + " light is currently on, would you like to turn it on?")
+            check = input("(Y/N): ")
+            if check =="Y" or check == "y":
+                if light.changeState() == 0:
+                    print(roomName + " light has been turned off")
+                else: 
+                    print(roomName + " light has been turned on")
+                break
+            else:
                 break
                 
         # Temp system
@@ -39,17 +43,17 @@ def sys_init(list):
                 options = input("Select Function:")
                 # return state
                 if options == "1":
-                    print("Current State:" , x2.returnState())
+                    print("Current State:" , ac.returnState())
                 # set state
                 elif options == "2":
                     while True:
                         set = input("Set you state (0/1)：")
                         if set == "0":
-                            x3.changeState(0)
+                            heater.changeState(0)
                             print("Heater is Off.")
                             break
                         elif set=="1":
-                            x3.changeState(1)
+                            heater.changeState(1)
                             print("Heater is on.")
                             break
                         else:
@@ -59,9 +63,9 @@ def sys_init(list):
                 elif options == "3":
                     setT = input("Please input the Temperature you want to set:")
                     if setT>="16" and setT<="28":
-                        x3.setTemp(int(setT))
+                        heater.setTemp(int(setT))
                         print("You have successfully set the temperature to", setT)
-                        x4.setTemp(int(setT))
+                        thermometer.setTemp(int(setT))
                     else:
                         print("Invalid, please try again.")
 
@@ -69,7 +73,7 @@ def sys_init(list):
                 
                 # get current scheduled temp
                 elif options == "4":
-                    print("Current scheduled Temperature:",x3.getTemp())
+                    print("Current scheduled Temperature:",heater.getTemp())
 
             # Airconditioner System(2)
             elif sysChoice == "2":
@@ -77,17 +81,17 @@ def sys_init(list):
                 options = input("Select Function:")
                 # return state
                 if options == "1":
-                    print("Current State:" , x2.returnState())
+                    print("Current State:" , ac.returnState())
                 # set state
                 elif options == "2":
                     while True:
                         set = input("Set you state (0/1)：")
                         if set == "0":
-                            x2.changeState(0)
+                            ac.changeState(0)
                             print("Airconditioner is Off.")
                             break
                         elif set=="1":
-                            x2.changeState(1)
+                            ac.changeState(1)
                             print("Airconditioner is on.")
                             break
                         else:
@@ -97,7 +101,7 @@ def sys_init(list):
                 elif options == "3":
                     setT = input("Please input the Temperature you want to set:")
                     if setT>="16" and setT<="28":
-                        x2.setTemp(int(setT))
+                        ac.setTemp(int(setT))
                         print("You have successfully set the temperature to", setT)
                     else:
                         print("Invalid, please try again.")
@@ -106,7 +110,7 @@ def sys_init(list):
                 
                 # get current scheduled temp
                 elif options == "4":
-                    print("Current scheduled Temperature:",x2.getTemp())
+                    print("Current scheduled Temperature:",ac.getTemp())
             else:
                 print("No such system exist.")
 
