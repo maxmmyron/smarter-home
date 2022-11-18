@@ -1,6 +1,6 @@
 from tkinter import *
 from system import sys_init
-from light import * 
+from homeObjects import * 
 
 sitting_room_light = light(1) 
 sitting_room_thermometer = thermometer(2)
