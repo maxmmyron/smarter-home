@@ -59,10 +59,7 @@ class Room:
             return False
 
         # change state of room
-
-        self.__setattr__("light", target.light)
-
-        tempChange = 1 if target.temperature > self.temperature else -1
-        self.__setattr__("temperature", self.temperature + tempChange)
+        self.light = target.light
+        self.temperature += 1 if target.temperature > self.temperature else -1
 
         return True
