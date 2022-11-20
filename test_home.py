@@ -1,7 +1,6 @@
 # test_home.py
 
 import unittest
-
 from home import Home
 
 
@@ -12,6 +11,7 @@ class TestHome(unittest.TestCase):
 
         self.assertEqual(home.name, "test_home")
         self.assertEqual(home.rooms, [])
+        self.assertEqual(home.last_usage, [0, 0, 0])
 
     def test_add_room(self):
         # build home state and add rooms
@@ -65,6 +65,27 @@ class TestHome(unittest.TestCase):
         self.assertEqual(home.update(home_target), False)
         self.assertEqual(home.rooms[0].light, True)
         self.assertEqual(home.rooms[0].temperature, 22)
+
+    def test_get_usage(self):
+        # build home state and add rooms
+        home = Home("test_home")
+        home.add_room("test_room", False, 20)
+
+        # build target home state
+        home_target = Home("test_home")
+        home_target.add_room("test_room", True, 22)
+
+        # attempt home state change
+        self.assertEqual(home.update(home_target), True)
+        # get usage
+        usage = home.get_last_usage()
+        self.assertEqual(usage, [1, 1, 0])
+
+        # finish state change
+        self.assertEqual(home.update(home_target), True)
+        # get usage
+        usage = home.get_last_usage()
+        self.assertEqual(usage, [1, 1, 0])
 
 
 if __name__ == "__main__":
