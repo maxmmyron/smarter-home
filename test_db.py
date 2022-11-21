@@ -25,10 +25,10 @@ class TestDatabase(unittest.TestCase):
         home.add_room("test_room", True, 22)
 
         # run update on home object to update usage
-        home.update(None)
+        home.update(home)
 
         # add usage to database
-        db.add_usage(home.get_last_usage())
+        db.add_usage(date, home.usage)
 
         self.assertEqual(db.usage[date], [1, 0, 0])
 
@@ -45,8 +45,8 @@ class TestDatabase(unittest.TestCase):
         target.add_room("test_room", False, 30)
 
         for i in range(10):
-            usage = home.update(target)
-            db.add_usage(usage)
+            home.update(target)
+            db.add_usage(date, home.usage)
             self.assertEqual(db.usage[date], [0, i+1, 0])
 
     def test_add_usage_temp_down(self):
@@ -62,8 +62,8 @@ class TestDatabase(unittest.TestCase):
         target.add_room("test_room", False, 10)
 
         for i in range(10):
-            usage = home.update(target)
-            db.add_usage(usage)
+            home.update(target)
+            db.add_usage(date, home.usage)
             self.assertEqual(db.usage[date], [0, 0, i+1])
 
     def test_add_new_date(self):
@@ -76,18 +76,19 @@ class TestDatabase(unittest.TestCase):
         home.add_room("test_room", True, 22)
 
         # add usage to database
-        db.add_usage(home.getUsage())
+        home.update(home)
+        db.add_usage(date, home.usage)
 
         self.assertEqual(db.usage[date], [1, 0, 0])
 
         # add new date
         date = datetime.date.today() + datetime.timedelta(days=1)
-        db.add_date(date)
 
-        db.add_usage(home.getUsage())
+        db.add_date(date)
 
         self.assertEqual(db.usage[date], [0, 0, 0])
 
 
 if __name__ == "__main__":
+    # run test_add_new_date to see the error
     unittest.main()
