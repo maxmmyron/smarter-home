@@ -1,11 +1,17 @@
 # home.py
-# handles home state class and general home state logic
+# handles home state class and general home state update logic
 
 class Home:
     def __init__(self, name):
         self.name = name
         self.rooms = []
-        self.last_usage = [0, 0, 0]
+
+        # usage is a list of [light, temp_up, temp_down] usage.
+        # usage[0] tracks whether light is on (constant energy usage)
+        # usage[1] tracks whether temperature has increased between updates
+        # usage[2] tracks whether temperature has decreased between updates
+        # usage[1] and usage[2] are mutually exclusive with one another
+        self.usage = [0, 0, 0]
 
     # adds a new room to the home. if the room already exists, an exception is raised
     def add_room(self, name, light=False, temperature=21):
@@ -14,16 +20,11 @@ class Home:
             if room.name == name:
                 raise Exception("Room already exists")
 
-        # add room to home
-        new_room = Room(name, light, temperature)
-        self.rooms.append(new_room)
+        self.rooms.append(Room(name, light, temperature))
 
     # updates the home state to match closer to the target state
     # throws an exception if the target state does not match the structure of the home state
     def update(self, target):
-        # reset last usage to 0s
-        self.last_usage = [0, 0, 0]
-
         # ensure home state and target state have same structure
         if self.name != target.name:
             raise Exception("Home state name does not match target state name")
@@ -44,17 +45,23 @@ class Home:
             target_room = target.rooms[i]
 
             # has_updated will turn (and remain) True if any room has updated
-            has_updated = has_updated or state_room.update(target_room)
+            if state_room.update(target_room):
+                has_updated = True
 
-            # add room usage to home usage
-            self.last_usage[0] += state_room.last_usage[0]
-            self.last_usage[1] += state_room.last_usage[1]
-            self.last_usage[2] += state_room.last_usage[2]
+        # update last usage
+        self.__update_usage()
 
         return has_updated
 
-    def get_last_usage(self):
-        return self.last_usage
+    # updates the usage statistics of the home
+    def __update_usage(self):
+        self.usage = [0, 0, 0]
+
+        for room in self.rooms:
+            room_usage = room.usage
+            self.usage[0] += room_usage[0]
+            self.usage[1] += room_usage[1]
+            self.usage[2] += room_usage[2]
 
 
 class Room:
@@ -64,21 +71,31 @@ class Room:
 
         self.light = light
         self.temperature = temperature
-        self.last_usage = [0, 0, 0]
+        self.usage = [0, 0, 0]
+
+        # private variable to track temperature difference
+        self.__temp_diff = 0
 
     # updates the room state to match closer to the target room state
     def update(self, target):
-        if (self.light == target.light and self.temperature == target.temperature):
-            return False
+        has_updated = False
 
-        # change state of room
+        if (self.light != target.light or self.temperature != target.temperature):
+            has_updated = True
+
         self.light = target.light
-        temp_diff = 1 if target.temperature > self.temperature else -1
-        self.temperature += temp_diff
 
-        # update last usage
-        self.last_usage[0] = int(self.light)
-        self.last_usage[1] = int(temp_diff > 0)
-        self.last_usage[2] = int(temp_diff < 0)
+        # clamp __temp_diff to range [-1 1]
+        self.__temp_diff = min(
+            max(target.temperature - self.temperature, -1), 1)
+        self.temperature += self.__temp_diff
 
-        return True
+        self.__update_usage()
+
+        return has_updated
+
+    # private: updates the usage statistics of the room
+    def __update_usage(self):
+        self.usage[0] = int(self.light)
+        self.usage[1] = 1 if self.__temp_diff > 0 else 0
+        self.usage[2] = 1 if self.__temp_diff < 0 else 0

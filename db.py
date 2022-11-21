@@ -20,3 +20,7 @@ class Database:
             self.usage[date][2] += usage[2]
         else:
             self.usage[date] = usage
+
+    def add_date(self, date):
+        if date not in self.usage:
+            self.usage[date] = [0, 0, 0]
