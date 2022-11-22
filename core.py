@@ -21,9 +21,9 @@ class Core(tk.Tk):
     day = datetime.datetime(
         year=__tod.year, month=__tod.month, day=__tod.day, hour=0, minute=0)
 
-    __delta = 1
+    __delta = 60
 
-    __loop_delta = 500
+    __loop_delta = 1200
 
     def __init__(self):
         super().__init__()
@@ -43,7 +43,22 @@ class Core(tk.Tk):
 
         self.__loop()
         self.mainloop()
-    
+
+    def update_graphics(self):
+        for room in self.home.rooms:
+            self.my_canvas.delete(room.name)
+            if room.light == 1:
+                self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
+            else:
+                self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
+            tempX = room.x + 100
+            tempY = room.y + 50
+            self.my_canvas.delete(room.name + "label")
+            self.my_canvas.create_text(tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
+            self.my_canvas.delete(room.name + "temp")
+            self.my_canvas.create_text(tempX, tempY + 70, text=str(room.temperature), tags=room.name +"temp", fill="red", font=('Helvetica 15 bold'))
+
+
 
     def __init_vis(self):
         '''
@@ -84,6 +99,7 @@ class Core(tk.Tk):
 
         def user_input(self, room):
             sys_init(room)
+            
             self.my_canvas.delete(room.name)
             if room.light == 1:
                 self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
@@ -215,7 +231,9 @@ class Core(tk.Tk):
         target = input_state if input_state is not None else schedule_state if schedule_state is not None else self.home
 
         # update closer to target state
-        self.home.update(target)
+        update_check = self.home.update(target)
+        if update_check == True:
+            self.update_graphics()
 
         # add current state to db
         self.db.add_usage(date, self.home.usage)
@@ -227,7 +245,7 @@ class Core(tk.Tk):
         self.day += datetime.timedelta(minutes=self.__delta)
 
         self.after(self.__loop_delta, self.__loop)
-        pass
+        pass    
 
     def __update_vis(self, content):
         '''
