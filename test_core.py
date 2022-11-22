@@ -1,7 +1,8 @@
 # test_core.py
 
 import unittest
-from core import init
+from core import loop, init
+
 
 class TestCore(unittest.TestCase):
     def test_init(self):
