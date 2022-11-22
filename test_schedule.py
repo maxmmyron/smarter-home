@@ -20,14 +20,14 @@ class TestSchedule(unittest.TestCase):
 
         schedule.add_breakpoint("08:00", schedule_home)
 
+        schedule_breakpoint = schedule.get_breakpoint("08:00")
+
+        self.assertEqual(schedule_breakpoint.name, "schedule_home")
         self.assertEqual(
-            schedule.breakpoints["08:00"] in schedule.breakpoints, True)
-        self.assertEqual(schedule.breakpoints["08:00"].name, "schedule_home")
+            schedule_breakpoint.rooms[0].name, "schedule_room")
+        self.assertEqual(schedule_breakpoint.rooms[0].light, True)
         self.assertEqual(
-            schedule.breakpoints["08:00"].rooms[0].name, "schedule_room")
-        self.assertEqual(schedule.breakpoints["08:00"].rooms[0].light, True)
-        self.assertEqual(
-            schedule.breakpoints["08:00"].rooms[0].temperature, 23)
+            schedule_breakpoint.rooms[0].temperature, 23)
 
     def test_add_duplicate_breakpoint(self):
         schedule = Schedule()
@@ -48,10 +48,10 @@ class TestSchedule(unittest.TestCase):
         schedule_home.add_room("schedule_room", True, 23)
 
         # attempt to add breakpoint with invalid time
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             schedule.add_breakpoint("24:00", schedule_home)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             schedule.add_breakpoint("00:60", schedule_home)
 
     def test_get_breakpoint(self):
@@ -78,10 +78,10 @@ class TestSchedule(unittest.TestCase):
         schedule.add_breakpoint("08:00", schedule_home)
 
         # attempt to get breakpoint with invalid time
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             schedule.get_breakpoint("24:00")
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             schedule.get_breakpoint("00:60")
 
     def test_get_breakpoint_nonexistent_time(self):
