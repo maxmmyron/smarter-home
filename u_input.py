@@ -11,17 +11,17 @@ def sys_init(room):
         # Light System
         if option == "1":
             if room.light == 0:
-                print(room.name + " light is currently off, would you like to turn it off?")
+                print(room.name + " light is currently off, would you like to turn it on?")
             else: 
-                print(room.name + " light is currently on, would you like to turn it on?")
+                print(room.name + " light is currently on, would you like to turn it off?")
             check = input("(Y/N): ")
             if check =="Y" or check == "y":
                 if room.light == 0:
                     room.light = 1
-                    print(room.name + " light has been turned off")
+                    print(room.name + " light has been turned on")
                 else: 
                     room.light = 0
-                    print(room.name + " light has been turned on")
+                    print(room.name + " light has been turned off")
                 break
             else:
                 break
