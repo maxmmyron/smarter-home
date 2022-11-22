@@ -135,6 +135,8 @@ class Room:
         self.light = light
         self.temperature = temperature
         self.usage = [0, 0, 0]
+        self.x = None
+        self.y = None
 
         self.__temp_diff = 0
         '''
