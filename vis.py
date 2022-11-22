@@ -12,6 +12,9 @@ home.add_room("BedroomB")
 
 
 def graphics(home):
+    print("-------------------------------------------------------")
+    print(" Welcome to the America Moth Smart Home control System")
+    print("-------------------------------------------------------")
     rooms = home.rooms
     my_window = Tk()
     my_window.title("Canvas")

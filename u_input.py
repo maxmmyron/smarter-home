@@ -2,12 +2,10 @@ def sys_init(room):
     # init system
     _is_running = True
  
-    print("-------------------------------------------------------")
-    print(" Welcome to the America Moth Smart Home control System")
     while _is_running:
-        print("-------------------------------------------------------")
-        print("1. Light System. 2. Temperature System.")
-        option = input("Please select your options: ")
+        print("1. " + room.name + " Light System. 2. " + room.name + " Temperature System.")
+        option = input("Please select your option: ")
+
         # Light System
         if option == "1":
             if room.light == 0:
@@ -18,34 +16,36 @@ def sys_init(room):
             if check =="Y" or check == "y":
                 if room.light == 0:
                     room.light = 1
-                    print(room.name + " light has been turned on")
+                    print(room.name + " light has been turned on, exiting system \n")
                 else: 
                     room.light = 0
-                    print(room.name + " light has been turned off")
+                    print(room.name + " light has been turned off, exiting system \n")
                 break
             else:
+                print("Exiting system \n")
                 break
                 
         # Temp system
         elif option == "2":
-            print(room.name + " temperature is currently " + str(room.temperature) + ", would you like to change?")
-            check = input("(Y/N): ")
-            if check =="Y" or check == "y":
-                setT = int(input("Please input the Temperature you want to set:"))
-                if setT >= 0 and setT <= 28:
-                    room.temperature = setT
-                    print("You have successfully set the temperature to ", str(setT))
+            setT = None
+            print(room.name + " temperature is currently " + str(room.temperature) + ".")
+            while type(setT) != int:    
+                setT = input("Please input the temperature you want to set: ")
+                try:
+                    setT = int(setT)
+                except: 
+                    print("Invalid input")
                 else:
-                    print("Invalid, please try again.")
-                break
-            else:
-                break
+                    if setT >= 0 and setT <= 28:
+                        room.temperature = setT
+                        print("You have successfully set the temperature to", str(setT))
+                    else:
+                        print("Invalid, please try again.")
+                    print("Exiting system \n")
+            break
+            
 
         # double check to exit the system
-        elif option== "q":
-            check = input("Y/N:")
-            if check =="Y" or check == "y":
-                _is_running = False
-                print("Exiting system")
-            else:
-                continue
+        elif option == "q" or option == "Q":
+            print("Exiting system \n")
+            break
