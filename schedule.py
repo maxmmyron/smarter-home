@@ -51,6 +51,28 @@ class Schedule:
 
         return None
 
+    def get_last_breakpoint(self, time):
+        '''
+        gets the last matching breakpoint before the specified time
+
+        time: the time of the breakpoint in the format "HH:MM"
+
+        returns:
+        - the breakpoint, if there is a breakpoint at/before the specified time
+        - None, if there is no breakpoint before the specified time
+        '''
+
+        self.__validate_time(time)
+
+        last_breakpoint = None
+
+        for breakpoint in self.breakpoints:
+            if breakpoint <= time:
+                last_breakpoint = self.breakpoints[breakpoint]
+
+        # return the last breakpoint before the specified time
+        return last_breakpoint
+
     # private: validates time string passed in when adding / getting a breakpoint
     def __validate_time(self, time):
         '''

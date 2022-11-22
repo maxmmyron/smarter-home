@@ -207,7 +207,7 @@ class Core(tk.Tk):
 
         # get the schedule breakpoint current day
         # TODO: implement as "get_last_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
-        schedule_state = self.schedule.get_breakpoint(time)
+        schedule_state = self.schedule.get_last_breakpoint(time)
 
         # set target state to input state if input state is not None
         # otherwise set target state to schedule state
