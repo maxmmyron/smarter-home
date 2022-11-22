@@ -132,6 +132,17 @@ class TestHome(unittest.TestCase):
         self.assertEqual(home.rooms[1].temperature, 21)
         self.assertEqual(home.rooms[1].usage, [0, 0, 0])
 
+    def test_set_room(self):
+        home = Home("test_home")
+
+        # build home state and add rooms
+        home.add_room("test_room_1")
+
+        home.set_room("test_room_1", True, 23)
+
+        self.assertEqual(home.rooms[0].light, True)
+        self.assertEqual(home.rooms[0].temperature, 23)
+
 
 if __name__ == "__main__":
     unittest.main()
