@@ -3,18 +3,38 @@
 
 class Home:
     def __init__(self, name):
+        '''
+        creates a new Home object with the specified name.
+
+        name: the name of the home
+        '''
+
         self.name = name
+        '''the name of the home'''
+
         self.rooms = []
+        '''a list of rooms in the home. each room is a Room object'''
 
-        # usage is a list of [light, temp_up, temp_down] usage.
-        # usage[0] tracks whether light is on (constant energy usage)
-        # usage[1] tracks whether temperature has increased between updates
-        # usage[2] tracks whether temperature has decreased between updates
-        # usage[1] and usage[2] are mutually exclusive with one another
         self.usage = [0, 0, 0]
+        '''
+        a list of usage statistics for the home.
 
-    # adds a new room to the home. if the room already exists, an exception is raised
+        - usage[0] tracks whether light or not the is on (constant energy usage)
+        - usage[1] tracks whether temperature has increased between updates
+        - usage[2] tracks whether temperature has decreased between updates
+        '''
+
     def add_room(self, name, light=False, temperature=21):
+        '''
+        adds a new room to the home.
+
+        name: the name of the room
+        light: whether or the light is on or not. defaults to False
+        temperature: the temperature of the room. defaults to 21
+
+        raises an exception if a room with the specified name already exists
+        '''
+
         # check if room already exists
         for room in self.rooms:
             if room.name == name:
@@ -23,17 +43,41 @@ class Home:
         self.rooms.append(Room(name, light, temperature))
 
     def set_room(self, name, light, temperature):
+        '''
+        instantly sets the state of the specified room to the provided state values
+
+        name: the name of the room to set state
+
+        light: whether the light is on or not
+        temperature: the temperature of the room
+
+        returns True if the room was found
+
+        raises an exception if the room does not exist
+        '''
+
         for room in self.rooms:
             if room.name == name:
                 room.light = light if light is not None else room.light
                 room.temperature = temperature if temperature is not None else room.temperature
+                return True
 
-    # updates the home state to match closer to the target state
-    # throws an exception if the target state does not match the structure of the home state
+        raise Exception("Room does not exist")
+
     def update(self, target):
+        '''
+        updates the home state to match closer to the target state
+
+        target: the target state to update to. must match home state in number of rooms and room names.
+
+        returns:
+        - True if the home state was updated closer to the target state
+        - False if the home state was not updated closer to the target state
+
+        raises an exception if the target state does not match the structure of the original state
+        '''
+
         # ensure home state and target state have same structure
-        if self.name != target.name:
-            raise Exception("Home state name does not match target state name")
         if len(self.rooms) != len(target.rooms):
             raise Exception(
                 "Home state room count does not match target state room count")
@@ -43,6 +87,7 @@ class Home:
                 raise Exception(
                     "Room state name does match target state name at index " + str(i))
 
+        # track whether any room was updated or not
         has_updated = False
 
         # iterate through rooms and attempt to change state
@@ -59,8 +104,14 @@ class Home:
 
         return has_updated
 
-    # updates the usage statistics of the home
     def __update_usage(self):
+        '''
+        private
+
+        updates the overall usage statistics of the home.
+        takes usage statistics from each room and aggregates them into a single usage struct.
+        '''
+
         self.usage = [0, 0, 0]
 
         for room in self.rooms:
@@ -71,27 +122,46 @@ class Home:
 
 
 class Room:
-    # creates a new room with a name, light boolean, and temperature
     def __init__(self, name, light, temperature):
+        '''
+        creates a new Room object with the specified name, light boolean, and temperature
+
+        name: the name of the room
+        light: whether the light is on or not
+        temperature: the temperature of the room
+        '''
         self.name = name
 
         self.light = light
         self.temperature = temperature
         self.usage = [0, 0, 0]
 
-        # private variable to track temperature difference
         self.__temp_diff = 0
+        '''
+        private
+
+        tracks the last difference between the target temperature and the current temperature.
+        used to calculate usage statistics.
+        '''
 
     # updates the room state to match closer to the target room state
     def update(self, target):
+        '''
+        updates the room state to match closer to the target state
+
+        target: the target state to update to. must match room state in name.
+        '''
+
         has_updated = False
 
         if (self.light != target.light or self.temperature != target.temperature):
             has_updated = True
 
+        # set light to target (since it's just a boolean value)
         self.light = target.light
 
         # clamp __temp_diff to range [-1 1]
+        # TODO: improve this such that we can specify a certain "temperature step" size
         self.__temp_diff = min(
             max(target.temperature - self.temperature, -1), 1)
         self.temperature += self.__temp_diff
@@ -100,8 +170,13 @@ class Room:
 
         return has_updated
 
-    # private: updates the usage statistics of the room
     def __update_usage(self):
+        '''
+        private
+
+        updates the usage statistics of the room.
+        '''
+
         self.usage[0] = int(self.light)
         self.usage[1] = 1 if self.__temp_diff > 0 else 0
         self.usage[2] = 1 if self.__temp_diff < 0 else 0
