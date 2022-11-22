@@ -44,20 +44,6 @@ class Core(tk.Tk):
         self.__loop()
         self.mainloop()
     
-    def input(self, room):
-
-        sys_init(room)
-        self.my_canvas.delete(room.name)
-        if room.light == 1:
-            self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
-        else:
-            self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
-        tempX = room.x + 100
-        tempY = room.y + 50
-        self.my_canvas.delete(room.name + "label")
-        self.my_canvas.create_text(tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.delete(room.name + "temp")
-        self.my_canvas.create_text(tempX, tempY + 70, text=str(room.temperature), tags=room.name +"temp", fill="red", font=('Helvetica 15 bold'))
 
     def __init_vis(self):
         '''
@@ -96,10 +82,24 @@ class Core(tk.Tk):
         self.my_canvas.create_text(350,370, text=str(rooms[3].temperature), tags=rooms[3].name + "temp", fill="red", font=('Helvetica 15 bold'))
         self.my_canvas.pack()
 
-        a = tk.Button(self, text=rooms[0].name, command=lambda: input(rooms[0]))
-        b = tk.Button(self, text=rooms[1].name, command=lambda: input(rooms[1]))
-        c = tk.Button(self, text=rooms[2].name, command=lambda: input(rooms[2]))
-        d = tk.Button(self, text=rooms[3].name, command=lambda: input(rooms[3]))
+        def user_input(self, room):
+            sys_init(room)
+            self.my_canvas.delete(room.name)
+            if room.light == 1:
+                self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
+            else:
+                self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
+            tempX = room.x + 100
+            tempY = room.y + 50
+            self.my_canvas.delete(room.name + "label")
+            self.my_canvas.create_text(tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
+            self.my_canvas.delete(room.name + "temp")
+            self.my_canvas.create_text(tempX, tempY + 70, text=str(room.temperature), tags=room.name +"temp", fill="red", font=('Helvetica 15 bold'))
+
+        a = tk.Button(self, text=rooms[0].name, command=lambda: user_input(self, rooms[0]))
+        b = tk.Button(self, text=rooms[1].name, command=lambda: user_input(self, rooms[1]))
+        c = tk.Button(self, text=rooms[2].name, command=lambda: user_input(self, rooms[2]))
+        d = tk.Button(self, text=rooms[3].name, command=lambda: user_input(self, rooms[3]))
         a.pack()
         b.pack()
         c.pack()
@@ -151,7 +151,7 @@ class Core(tk.Tk):
         schedule = Schedule()
 
         # NOTE: we can conveniently copy the home object
-        # to create breakpoints. However since = assignment
+        # to create breakpoints. However since = assignmenre
         # only creates a reference to the original object
         # and we don't want to change the original home state,
         # we need to use deepcopy() to create a copy that
