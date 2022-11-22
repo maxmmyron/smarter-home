@@ -7,42 +7,58 @@ from home import Home
 from db import Database
 from schedule import Schedule
 import copy
+from time import sleep
 
 db = None
 home = None
 schedule = None
 
 # runtime stats
-runtime = 0
-day_length = 24000
-delta = 500  # eqiv to 30 min increments
-day = datetime.date.today()
+__tod = datetime.date.today()
+
+day = datetime.datetime(year=__tod.year, month=__tod.month,
+                        day=__tod.day, hour=0, minute=0)
+'''current day and time'''
+
+__delta = 30
+'''delta in minutes to add per loop cycle'''
+
+__loop_delta = 0.1
+'''sleep time of loop in seconds'''
 
 
 def loop():
-    global runtime, day, day_length, delta, db, home, schedule
+    global runtime, day, __delta, db, home, schedule
 
-    if (runtime - day_length > 0):
-        # update day
-        day = datetime.date.today() + datetime.timedelta(days=1)
-        db.add_date(day)
-        runtime = 0
+    # extract date and time values from day
+    date = day.date()
+    time = day.time().strftime("%H:%M")
 
-    # input_state = check_input()
+    # TODO: implement user input class
+    input_state = None
 
-    # schedule_state = schedule.check_schedule(runtime)
+    # get the schedule breakpoint current day
+    # TODO: implement as "get_last_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
+    schedule_state = schedule.get_breakpoint(time)
 
     # set target state to input state if input state is not None
     # otherwise set target state to schedule state
     # otherwise set target state to current state (no change)
+    target = input_state if input_state is not None else schedule_state if schedule_state is not None else home
 
-    #target = (input_state or schedule_state) or home_state
-
+    # update closer to target state
     home.update(target)
 
-    db.add_usage(home.usage)
+    # add current state to db
+    db.add_usage(date, home.usage)
 
-    runtime += delta
+    print("date: " + str(date) + " time: " + str(time))
+
+    # update date and time
+    day += datetime.timedelta(minutes=__delta)
+
+    sleep(0.1)
+    loop()
 
 
 def init():
@@ -62,6 +78,8 @@ def init():
     home.add_room("bedroomB")
 
     schedule = create_schedule(home)
+
+    loop()
 
 
 def create_schedule(home):
@@ -113,3 +131,7 @@ def create_schedule(home):
     schedule.add_breakpoint("22:00", sleep_breakpoint)
 
     return schedule
+
+
+if __name__ == "__main__":
+    init()
