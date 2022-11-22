@@ -8,6 +8,7 @@ import tkinter as tk
 from home import Home
 from db import Database
 from schedule import Schedule
+from user_input import sys_init
 
 
 class Core(tk.Tk):
@@ -20,15 +21,16 @@ class Core(tk.Tk):
     day = datetime.datetime(
         year=__tod.year, month=__tod.month, day=__tod.day, hour=0, minute=0)
 
-    __delta = 30
+    __delta = 1
 
-    __loop_delta = 100
+    __loop_delta = 500
 
     def __init__(self):
         super().__init__()
+        self.time = None
 
         self.title("Home")
-        self.geometry("800x600")
+        self.geometry("1000x800")
         self.resizable(False, False)
 
         self.__init_data()
@@ -41,6 +43,21 @@ class Core(tk.Tk):
 
         self.__loop()
         self.mainloop()
+    
+    def input(self, room):
+
+        sys_init(room)
+        self.my_canvas.delete(room.name)
+        if room.light == 1:
+            self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
+        else:
+            self.my_canvas.create_rectangle(room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
+        tempX = room.x + 100
+        tempY = room.y + 50
+        self.my_canvas.delete(room.name + "label")
+        self.my_canvas.create_text(tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.delete(room.name + "temp")
+        self.my_canvas.create_text(tempX, tempY + 70, text=str(room.temperature), tags=room.name +"temp", fill="red", font=('Helvetica 15 bold'))
 
     def __init_vis(self):
         '''
@@ -50,10 +67,49 @@ class Core(tk.Tk):
         '''
 
         print("initializing visual components")
+        rooms = self.home.rooms
+        self.my_canvas = tk.Canvas(self, width=500, height=500, bg="white")
+
+        self.my_canvas.create_rectangle(50, 50, 250, 250, tags=rooms[0].name, fill="cyan")
+        rooms[0].x = 50
+        rooms[0].y = 50
+        self.my_canvas.create_text(150,100, text=rooms[0].name, tags=rooms[0].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(150,170, text=str(rooms[0].temperature), tags=rooms[0].name + "temp", fill="red", font=('Helvetica 15 bold'))
+    
+        self.my_canvas.create_rectangle(250, 50, 450, 250, tags=rooms[1].name, fill="cyan")
+        rooms[1].x = 250
+        rooms[1].y = 50
+        self.my_canvas.create_text(350,100, text=rooms[1].name, tags=rooms[1].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(350,170, text=str(rooms[1].temperature), tags=rooms[1].name + "temp", fill="red", font=('Helvetica 15 bold'))
+
+
+        self.my_canvas.create_rectangle(50, 250, 250, 450, tags=rooms[2].name, fill="cyan")
+        rooms[2].x = 50
+        rooms[2].y = 250
+        self.my_canvas.create_text(150,300, text=rooms[2].name, tags=rooms[2].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(150,370, text=str(rooms[2].temperature), tags=rooms[2].name + "temp", fill="red", font=('Helvetica 15 bold'))
+
+        self.my_canvas.create_rectangle(250, 250, 450, 450, tags=rooms[3].name, fill="cyan")
+        rooms[3].x = 250
+        rooms[3].y = 250
+        self.my_canvas.create_text(350,300, text=rooms[3].name, tags=rooms[3].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(350,370, text=str(rooms[3].temperature), tags=rooms[3].name + "temp", fill="red", font=('Helvetica 15 bold'))
+        self.my_canvas.pack()
+
+        a = tk.Button(self, text=rooms[0].name, command=lambda: input(rooms[0]))
+        b = tk.Button(self, text=rooms[1].name, command=lambda: input(rooms[1]))
+        c = tk.Button(self, text=rooms[2].name, command=lambda: input(rooms[2]))
+        d = tk.Button(self, text=rooms[3].name, command=lambda: input(rooms[3]))
+        a.pack()
+        b.pack()
+        c.pack()
+        d.pack()
 
         # add a text widget to display the word "Hello"
         self.label = tk.Label(self, text="Hello")
         self.label.pack()
+
+
 
     def __init_data(self):
         '''
@@ -144,6 +200,7 @@ class Core(tk.Tk):
         # extract date and time values from day
         date = self.day.date()
         time = self.day.time().strftime("%H:%M")
+        self.time = time
 
         # TODO: implement user input class
         input_state = None
@@ -164,7 +221,7 @@ class Core(tk.Tk):
         self.db.add_usage(date, self.home.usage)
 
         # update tkinter vis
-        self.__update_vis(str(self.home.rooms[0].temperature))
+        self.__update_vis(str(self.time))
 
         # update date and time
         self.day += datetime.timedelta(minutes=self.__delta)

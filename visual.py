@@ -1,5 +1,5 @@
 from tkinter import *
-from u_input import sys_init
+from user_input import sys_init
 from home import * 
 
 home = Home("home")
