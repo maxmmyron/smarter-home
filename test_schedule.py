@@ -91,6 +91,47 @@ class TestSchedule(unittest.TestCase):
 
         self.assertEqual(nonexistent_breakpoint, None)
 
+    def test_get_last_breakpoint(self):
+        schedule = Schedule()
+
+        schedule_home = Home("schedule_home")
+        schedule_home.add_room("schedule_room", True, 23)
+
+        schedule_homeB = Home("schedule_home")
+        schedule_homeB.add_room("schedule_room", False, 24)
+
+        schedule.add_breakpoint("08:00", schedule_home)
+
+        schedule.add_breakpoint("09:00", schedule_homeB)
+
+        schedule_breakpoint = schedule.get_last_breakpoint("08:00")
+
+        self.assertEqual(schedule_breakpoint.name, "schedule_home")
+        self.assertEqual(schedule_breakpoint.rooms[0].name, "schedule_room")
+        self.assertEqual(schedule_breakpoint.rooms[0].light, True)
+        self.assertEqual(schedule_breakpoint.rooms[0].temperature, 23)
+
+        schedule_breakpoint = schedule.get_last_breakpoint("08:30")
+
+        self.assertEqual(schedule_breakpoint.name, "schedule_home")
+        self.assertEqual(schedule_breakpoint.rooms[0].name, "schedule_room")
+        self.assertEqual(schedule_breakpoint.rooms[0].light, True)
+        self.assertEqual(schedule_breakpoint.rooms[0].temperature, 23)
+
+        schedule_breakpoint = schedule.get_last_breakpoint("09:00")
+
+        self.assertEqual(schedule_breakpoint.name, "schedule_home")
+        self.assertEqual(schedule_breakpoint.rooms[0].name, "schedule_room")
+        self.assertEqual(schedule_breakpoint.rooms[0].light, False)
+        self.assertEqual(schedule_breakpoint.rooms[0].temperature, 24)
+
+        schedule_breakpoint = schedule.get_last_breakpoint("09:30")
+
+        self.assertEqual(schedule_breakpoint.name, "schedule_home")
+        self.assertEqual(schedule_breakpoint.rooms[0].name, "schedule_room")
+        self.assertEqual(schedule_breakpoint.rooms[0].light, False)
+        self.assertEqual(schedule_breakpoint.rooms[0].temperature, 24)
+
 
 if __name__ == '__main__':
     unittest.main()
