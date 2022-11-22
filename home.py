@@ -22,6 +22,12 @@ class Home:
 
         self.rooms.append(Room(name, light, temperature))
 
+    def set_room(self, name, light, temperature):
+        for room in self.rooms:
+            if room.name == name:
+                room.light = light if light is not None else room.light
+                room.temperature = temperature if temperature is not None else room.temperature
+
     # updates the home state to match closer to the target state
     # throws an exception if the target state does not match the structure of the home state
     def update(self, target):
