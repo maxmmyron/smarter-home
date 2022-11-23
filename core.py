@@ -22,7 +22,7 @@ class Core(tk.Tk):
 
     __delta = 30
 
-    __loop_delta = 100
+    __loop_delta = 500
 
     def __init__(self):
         super().__init__()
@@ -49,11 +49,12 @@ class Core(tk.Tk):
         inits tkinter widgets and builds home from initial home object
         '''
 
-        print("initializing visual components")
-
         # add a text widget to display the word "Hello"
-        self.label = tk.Label(self, text="Hello")
-        self.label.pack()
+        self.tempLabel = tk.Label(self, text="")
+        self.tempLabel.pack()
+
+        self.dateLabel = tk.Label(self, text="")
+        self.dateLabel.pack()
 
     def __init_data(self):
         '''
@@ -61,8 +62,6 @@ class Core(tk.Tk):
 
         inits db, home, and schedule
         '''
-
-        print("initializing data")
 
         # init db
         self.db = Database("db")
@@ -89,8 +88,6 @@ class Core(tk.Tk):
 
         returns: a new schedule object
         '''
-
-        print("building schedule")
 
         schedule = Schedule()
 
@@ -164,7 +161,7 @@ class Core(tk.Tk):
         self.db.add_usage(date, self.home.usage)
 
         # update tkinter vis
-        self.__update_vis(str(self.home.rooms[0].temperature))
+        self.__update_vis()
 
         # update date and time
         self.day += datetime.timedelta(minutes=self.__delta)
@@ -172,7 +169,7 @@ class Core(tk.Tk):
         self.after(self.__loop_delta, self.__loop)
         pass
 
-    def __update_vis(self, content):
+    def __update_vis(self):
         '''
         private
 
@@ -180,7 +177,8 @@ class Core(tk.Tk):
         '''
 
         # update label
-        self.label.config(text=content)
+        self.tempLabel.config(text=self.home.rooms[0].temperature)
+        self.dateLabel.config(text=self.day.strftime("%d/%m/%Y %H:%M"))
 
 
 if __name__ == "__main__":
