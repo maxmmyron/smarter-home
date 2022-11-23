@@ -19,11 +19,10 @@ def sys_init(room):
                     print(room.name + " light has been turned on, exiting system \n")
                 else: 
                     room.light = 0
-                    print(room.name + " light has been turned off, exiting system \n")
-                break
+                    print(room.name + " light has been turned off, exiting system \n")        
             else:
                 print("Exiting system \n")
-                break
+                
                 
         # Temp system
         elif option == "2":
@@ -42,10 +41,11 @@ def sys_init(room):
                     else:
                         print("Invalid, please try again.")
                     print("Exiting system \n")
-            break
             
 
         # double check to exit the system
         else:
             print("Exiting system \n")
-            break
+        
+        _is_running = False
+        return None
