@@ -195,11 +195,11 @@ class Core(tk.Tk):
         time = self.day.time().strftime("%H:%M")
         self.time = time
 
-        # TODO: implement user input class
+        # TODO: switch user input sys_init function to return a target object,
+        # instead of immediately editing current home object
         input_state = None
 
         # get the schedule breakpoint current day
-        # TODO: implement as "get_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
         schedule_state = self.schedule.get_breakpoint(time)
         if schedule_state == self.home:
             schedule_state = None

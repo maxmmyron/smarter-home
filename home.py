@@ -136,7 +136,9 @@ class Room:
         '''
         self.name = name
 
+        # TODO: allow for light to be a float value (0-1) to represent dimming
         self.light = light
+        # TODO: specify a "temperature step" size so it doesn't increase by integer steps
         self.temperature = temperature
         self.usage = [0, 0, 0]
 
@@ -167,8 +169,7 @@ class Room:
         # set light to target (since it's just a boolean value)
         self.light = target.light
 
-        # clamp _temp_diff to range [-1 1]
-        # TODO: improve this such that we can specify a certain "temperature step" size
+        # clamp _temp_diff to range [-1 1] to prevent overshoot
         self._temp_diff = min(
             max(target.temperature - self.temperature, -1), 1)
         self.temperature += self._temp_diff
