@@ -3,12 +3,12 @@
 import unittest
 from home import *
 from user_input import sys_init
-import unittest 
+import unittest
 from unittest import mock
 
 
 class TestUserInput(unittest.TestCase):
-   
+
     @mock.patch('user_input.input', create=True)
     def test_light_sucess(self, answers):
         test_home = Home("test")
@@ -16,7 +16,7 @@ class TestUserInput(unittest.TestCase):
         answers.side_effect = ['1', 'Y']
         sys_init(test_home.rooms[0])
         self.assertEquals(test_home.rooms[0].light, False)
-        
+
     @mock.patch('user_input.input', create=True)
     def test_light_failure(self, answers):
         test_home = Home("test")
@@ -57,3 +57,6 @@ class TestUserInput(unittest.TestCase):
         sys_init(test_home.rooms[0])
         self.assertEquals(test_home.rooms[0].temperature, 10)
 
+
+if __name__ == '__main__':
+    unittest.main()
