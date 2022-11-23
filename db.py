@@ -73,3 +73,4 @@ class Database:
             return None
 
         print(self.usage)
+        return self.usage[date]
