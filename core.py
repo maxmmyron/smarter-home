@@ -30,7 +30,7 @@ class Core(tk.Tk):
         self.time = None
 
         self.title("Home")
-        self.geometry("500x500")
+        self.geometry("600x500")
         self.resizable(False, False)
 
         self._init_data()
@@ -43,15 +43,6 @@ class Core(tk.Tk):
 
         self._loop()
         self.mainloop()
-
-    def update_graphics(self):
-        for room in self.home.rooms:
-            # delete old room data
-            self.canvas.delete(room.name)
-            self.canvas.delete(room.name + "label")
-            self.canvas.delete(room.name + "temp")
-
-            self._build_tk_room(room)
 
     def _init_data(self):
         '''
@@ -142,7 +133,7 @@ class Core(tk.Tk):
         self.dateLabel.pack(side="right")
 
         self.canvas = tk.Canvas(self, width=400, height=400, bg="white")
-        self.canvas.pack()
+        self.canvas.pack(side="top")
 
         for room in self.home.rooms:
             self._build_tk_room(room)
