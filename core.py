@@ -129,6 +129,8 @@ class Core(tk.Tk):
         inits tkinter widgets and builds home from initial home object
         '''
 
+        # TODO: improve vis look
+
         self.dateLabel = tk.Label(self, text="", font=("Arial 13"))
         self.dateLabel.pack(side="right")
 
