@@ -155,7 +155,9 @@ class Core(tk.Tk):
         kitchen_override.pack(side='left', padx=5, pady=5)
         dining_room_override.pack(side='left', padx=5, pady=5)
         bedroom_override.pack(side='left', padx=5, pady=5)
-        dataButton = tk.Button(self,text="Database",command=lambda: self.db.get_usage(datetime.date.today()))
+        # dataButton = tk.Button(self,text="Database",command=lambda: self.db.get_usage(datetime.date.today()))
+        # dataButton.pack(side='left', padx=5, pady=5)
+        dataButton = tk.Button(self,text="Database",command=lambda: self.db.print_usage())
         dataButton.pack(side='left', padx=5, pady=5)
 
     def _get_user_input(self, room):
