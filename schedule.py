@@ -23,7 +23,7 @@ class Schedule:
         - a breakpoint already exists at the specified time
         '''
 
-        self.__validate_time(time)
+        self._validate_time(time)
 
         if (time in self.breakpoints):
             raise Exception("Breakpoint already exists")
@@ -44,7 +44,7 @@ class Schedule:
 
         raises an exception if the time is invalid
         '''
-        self.__validate_time(time)
+        self._validate_time(time)
 
         if (time in self.breakpoints):
             return self.breakpoints[time]
@@ -62,7 +62,7 @@ class Schedule:
         - None, if there is no breakpoint before the specified time
         '''
 
-        self.__validate_time(time)
+        self._validate_time(time)
 
         last_breakpoint = None
 
@@ -74,7 +74,7 @@ class Schedule:
         return last_breakpoint
 
     # private: validates time string passed in when adding / getting a breakpoint
-    def __validate_time(self, time):
+    def _validate_time(self, time):
         '''
         validates the time string passed in when adding / getting a breakpoint
 

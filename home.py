@@ -104,11 +104,11 @@ class Home:
                 has_updated = True
 
         # update last usage
-        self.__update_usage()
+        self._update_usage()
 
         return has_updated
 
-    def __update_usage(self):
+    def _update_usage(self):
         '''
         private
 
@@ -143,7 +143,7 @@ class Room:
         self.x = x
         self.y = y
 
-        self.__temp_diff = 0
+        self._temp_diff = 0
         '''
         private
 
@@ -167,17 +167,17 @@ class Room:
         # set light to target (since it's just a boolean value)
         self.light = target.light
 
-        # clamp __temp_diff to range [-1 1]
+        # clamp _temp_diff to range [-1 1]
         # TODO: improve this such that we can specify a certain "temperature step" size
-        self.__temp_diff = min(
+        self._temp_diff = min(
             max(target.temperature - self.temperature, -1), 1)
-        self.temperature += self.__temp_diff
+        self.temperature += self._temp_diff
 
-        self.__update_usage()
+        self._update_usage()
 
         return has_updated
 
-    def __update_usage(self):
+    def _update_usage(self):
         '''
         private
 
@@ -185,5 +185,5 @@ class Room:
         '''
 
         self.usage[0] = int(self.light)
-        self.usage[1] = 1 if self.__temp_diff > 0 else 0
-        self.usage[2] = 1 if self.__temp_diff < 0 else 0
+        self.usage[1] = 1 if self._temp_diff > 0 else 0
+        self.usage[2] = 1 if self._temp_diff < 0 else 0

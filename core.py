@@ -16,14 +16,14 @@ class Core(tk.Tk):
     db = None
     schedule = None
 
-    __tod = datetime.date.today()
+    _tod = datetime.date.today()
 
     day = datetime.datetime(
-        year=__tod.year, month=__tod.month, day=__tod.day, hour=0, minute=0)
+        year=_tod.year, month=_tod.month, day=_tod.day, hour=0, minute=0)
 
-    __delta = 60
+    _delta = 60
 
-    __loop_delta = 1200
+    _loop_delta = 1200
 
     def __init__(self):
         super().__init__()
@@ -33,15 +33,15 @@ class Core(tk.Tk):
         self.geometry("1000x800")
         self.resizable(False, False)
 
-        self.__init_data()
-        self.__init_vis()
+        self._init_data()
+        self._init_vis()
 
     def run(self):
         '''
         starts logic loop and tkinter mainloop
         '''
 
-        self.__loop()
+        self._loop()
         self.mainloop()
 
     def update_graphics(self):
@@ -51,9 +51,9 @@ class Core(tk.Tk):
             self.canvas.delete(room.name + "label")
             self.canvas.delete(room.name + "temp")
 
-            self.__build_tk_room(room)
+            self._build_tk_room(room)
 
-    def __init_vis(self):
+    def _init_vis(self):
         '''
         private
 
@@ -64,7 +64,7 @@ class Core(tk.Tk):
         self.canvas = tk.Canvas(self, width=500, height=500, bg="white")
 
         for room in rooms:
-            self.__build_tk_room(room)
+            self._build_tk_room(room)
 
         self.canvas.pack()
 
@@ -107,7 +107,7 @@ class Core(tk.Tk):
         self.dateLabel = tk.Label(self, text="")
         self.dateLabel.pack()
 
-    def __build_tk_room(self, room):
+    def _build_tk_room(self, room):
         light_fill = "yellow" if room.light else "cyan"
 
         self.canvas.create_rectangle(
@@ -117,7 +117,7 @@ class Core(tk.Tk):
         self.canvas.create_text(room.x + 100, room.y + 120, text=str(
             room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
 
-    def __init_data(self):
+    def _init_data(self):
         '''
         private
 
@@ -137,9 +137,9 @@ class Core(tk.Tk):
         self.home.add_room("bedroomA", False, 21, 50, 250)
         self.home.add_room("bedroomB", False, 21, 250, 250)
 
-        self.schedule = self.__init_schedule(self.home)
+        self.schedule = self._init_schedule(self.home)
 
-    def __init_schedule(self, home):
+    def _init_schedule(self, home):
         '''
         private
 
@@ -198,7 +198,7 @@ class Core(tk.Tk):
 
         return schedule
 
-    def __loop(self):
+    def _loop(self):
         # extract date and time values from day
         date = self.day.date()
         time = self.day.time().strftime("%H:%M")
@@ -225,15 +225,15 @@ class Core(tk.Tk):
         self.db.add_usage(date, self.home.usage)
 
         # update tkinter vis
-        self.__update_vis()
+        self._update_vis()
 
         # update date and time
-        self.day += datetime.timedelta(minutes=self.__delta)
+        self.day += datetime.timedelta(minutes=self._delta)
 
-        self.after(self.__loop_delta, self.__loop)
+        self.after(self._loop_delta, self._loop)
         pass
 
-    def __update_vis(self):
+    def _update_vis(self):
         '''
         private
 
