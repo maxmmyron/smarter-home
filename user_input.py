@@ -46,6 +46,6 @@ def sys_init(room):
             
 
         # double check to exit the system
-        elif option == "q" or option == "Q":
+        else:
             print("Exiting system \n")
             break
