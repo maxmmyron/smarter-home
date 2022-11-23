@@ -142,11 +142,11 @@ class Core(tk.Tk):
         d.pack()
 
         # add a text widget to display the word "Hello"
-        # self.tempLabel = tk.Label(self, text="")
-        # self.tempLabel.pack()
+        self.tempLabel = tk.Label(self, text="")
+        self.tempLabel.pack()
 
-        # self.dateLabel = tk.Label(self, text="")
-        # self.dateLabel.pack()
+        self.dateLabel = tk.Label(self, text="")
+        self.dateLabel.pack()
 
     def __init_data(self):
         '''
@@ -272,8 +272,8 @@ class Core(tk.Tk):
         '''
 
         # update label
-        # self.tempLabel.config(text=self.home.rooms[0].temperature)
-        # self.dateLabel.config(text=self.day.strftime("%d/%m/%Y %H:%M"))
+        self.tempLabel.config(text=self.home.rooms[0].temperature)
+        self.dateLabel.config(text=self.day.strftime("%d/%m/%Y %H:%M"))
 
 
 if __name__ == "__main__":
