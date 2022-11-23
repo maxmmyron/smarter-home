@@ -159,7 +159,7 @@ class Core(tk.Tk):
         # "wake up" breakpoint
         wakeup_breakpoint = copy.deepcopy(home)  # create a deep copy
         wakeup_breakpoint.set_room("Sitting Room", True, 22)
-        schedule.add_breakpoint("06:00", wakeup_breakpoint)
+        schedule.set_breakpoint("06:00", wakeup_breakpoint)
 
         # "leave for work"
         leave_breakpoint = copy.deepcopy(home)
@@ -167,7 +167,7 @@ class Core(tk.Tk):
         leave_breakpoint.set_room("Kitchen", False, 19)
         leave_breakpoint.set_room("Dining Room", False, 19)
         leave_breakpoint.set_room("Bedroom", False, 19)
-        schedule.add_breakpoint("08:00", leave_breakpoint)
+        schedule.set_breakpoint("08:00", leave_breakpoint)
 
         # "arrive from work" breakpoint
         arrive_breakpoint = copy.deepcopy(home)
@@ -175,7 +175,7 @@ class Core(tk.Tk):
         arrive_breakpoint.set_room("Kitchen", True, 22)
         arrive_breakpoint.set_room("Dining Room", False, 21)
         arrive_breakpoint.set_room("Bedroom", False, 21)
-        schedule.add_breakpoint("17:00", arrive_breakpoint)
+        schedule.set_breakpoint("17:00", arrive_breakpoint)
 
         # "late night" breakpoint
         late_breakpoint = copy.deepcopy(home)
@@ -183,7 +183,7 @@ class Core(tk.Tk):
         late_breakpoint.set_room("Kitchen", False, 22)
         late_breakpoint.set_room("Dining Room", True, 22)
         late_breakpoint.set_room("Bedroom", True, 22)
-        schedule.add_breakpoint("20:00", late_breakpoint)
+        schedule.set_breakpoint("20:00", late_breakpoint)
 
         # "bedtime" breakpoint
         sleep_breakpoint = copy.deepcopy(home)
@@ -191,7 +191,7 @@ class Core(tk.Tk):
         sleep_breakpoint.set_room("Kitchen", False, 19)
         sleep_breakpoint.set_room("Dining Room", False, 21)
         sleep_breakpoint.set_room("Bedroom", False, 21)
-        schedule.add_breakpoint("22:00", sleep_breakpoint)
+        schedule.set_breakpoint("22:00", sleep_breakpoint)
 
         return schedule
 
