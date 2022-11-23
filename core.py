@@ -16,14 +16,14 @@ class Core(tk.Tk):
     db = None
     schedule = None
 
-    __tod = datetime.date.today()
+    _tod = datetime.date.today()
 
     day = datetime.datetime(
-        year=__tod.year, month=__tod.month, day=__tod.day, hour=0, minute=0)
+        year=_tod.year, month=_tod.month, day=_tod.day, hour=0, minute=0)
 
-    __delta = 60
+    _delta = 60
 
-    __loop_delta = 1200
+    _loop_delta = 1200
 
     def __init__(self):
         super().__init__()
@@ -33,36 +33,27 @@ class Core(tk.Tk):
         self.geometry("500x500")
         self.resizable(False, False)
 
-        self.__init_data()
-        self.__init_vis()
+        self._init_data()
+        self._init_vis()
 
     def run(self):
         '''
         starts logic loop and tkinter mainloop
         '''
 
-        self.__loop()
+        self._loop()
         self.mainloop()
 
     def update_graphics(self):
         for room in self.home.rooms:
-            self.my_canvas.delete(room.name)
-            if room.light == 1:
-                self.my_canvas.create_rectangle(
-                    room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
-            else:
-                self.my_canvas.create_rectangle(
-                    room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
-            tempX = room.x + 100
-            tempY = room.y + 50
-            self.my_canvas.delete(room.name + "label")
-            self.my_canvas.create_text(
-                tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
-            self.my_canvas.delete(room.name + "temp")
-            self.my_canvas.create_text(tempX, tempY + 70, text=str(
-                room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
+            # delete old room data
+            self.canvas.delete(room.name)
+            self.canvas.delete(room.name + "label")
+            self.canvas.delete(room.name + "temp")
 
-    def __init_vis(self):
+            self._build_tk_room(room)
+
+    def _init_vis(self):
         '''
         private
 
@@ -70,62 +61,30 @@ class Core(tk.Tk):
         '''
 
         rooms = self.home.rooms
-        self.my_canvas = tk.Canvas(self, width=400, height=400, bg="white")
+        self.canvas = tk.Canvas(self, width=500, height=500, bg="white")
 
-        self.my_canvas.create_rectangle(
-            0, 0, 200, 200, tags=rooms[0].name, fill="cyan")
-        rooms[0].x = 0
-        rooms[0].y = 0
-        self.my_canvas.create_text(
-            100, 50, text=rooms[0].name, tags=rooms[0].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(100, 120, text=str(
-            rooms[0].temperature), tags=rooms[0].name + "temp", fill="red", font=('Helvetica 15 bold'))
+        for room in rooms:
+            self._build_tk_room(room)
 
-        self.my_canvas.create_rectangle(
-            200, 0, 400, 200, tags=rooms[1].name, fill="cyan")
-        rooms[1].x = 200
-        rooms[1].y = 0
-        self.my_canvas.create_text(
-            300, 50, text=rooms[1].name, tags=rooms[1].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(300, 120, text=str(
-            rooms[1].temperature), tags=rooms[1].name + "temp", fill="red", font=('Helvetica 15 bold'))
-
-        self.my_canvas.create_rectangle(
-            0, 200, 200, 400, tags=rooms[2].name, fill="cyan")
-        rooms[2].x = 0
-        rooms[2].y = 200
-        self.my_canvas.create_text(
-            100, 250, text=rooms[2].name, tags=rooms[2].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(100, 320, text=str(
-            rooms[2].temperature), tags=rooms[2].name + "temp", fill="red", font=('Helvetica 15 bold'))
-
-        self.my_canvas.create_rectangle(
-            200, 200, 400, 400, tags=rooms[3].name, fill="cyan")
-        rooms[3].x = 200
-        rooms[3].y = 200
-        self.my_canvas.create_text(
-            300, 250, text=rooms[3].name, tags=rooms[3].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(300, 320, text=str(
-            rooms[3].temperature), tags=rooms[3].name + "temp", fill="red", font=('Helvetica 15 bold'))
-        self.my_canvas.pack()
+        self.canvas.pack()
 
         def user_input(self, room):
             sys_init(room)
 
-            self.my_canvas.delete(room.name)
+            self.canvas.delete(room.name)
             if room.light == 1:
-                self.my_canvas.create_rectangle(
+                self.canvas.create_rectangle(
                     room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
             else:
-                self.my_canvas.create_rectangle(
+                self.canvas.create_rectangle(
                     room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
-            tempX = room.x + 50
-            tempY = room.y + 25
-            self.my_canvas.delete(room.name + "label")
-            self.my_canvas.create_text(
+            tempX = room.x + 100
+            tempY = room.y + 50
+            self.canvas.delete(room.name + "label")
+            self.canvas.create_text(
                 tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
-            self.my_canvas.delete(room.name + "temp")
-            self.my_canvas.create_text(tempX, tempY + 70, text=str(
+            self.canvas.delete(room.name + "temp")
+            self.canvas.create_text(tempX, tempY + 70, text=str(
                 room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
 
         a = tk.Button(self, text=rooms[0].name,
@@ -142,11 +101,23 @@ class Core(tk.Tk):
         d.pack(side='left', padx=5, pady=5)
 
         # add a text widget to display the word "Hello"
+        self.tempLabel = tk.Label(self, text="")
+        self.tempLabel.pack()
 
-        self.dateLabel = tk.Label(self, text="", width=30, font=[('Arial 10')])
-        self.dateLabel.pack(side='right')
+        self.dateLabel = tk.Label(self, text="")
+        self.dateLabel.pack()
 
-    def __init_data(self):
+    def _build_tk_room(self, room):
+        light_fill = "yellow" if room.light else "cyan"
+
+        self.canvas.create_rectangle(
+            room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill=light_fill)
+        self.canvas.create_text(
+            room.x + 100, room.y + 50, text=room.name, tags=room.name + "-label", fill="black", font=('Helvetica 15 bold'))
+        self.canvas.create_text(room.x + 100, room.y + 120, text=str(
+            room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
+
+    def _init_data(self):
         '''
         private
 
@@ -161,14 +132,14 @@ class Core(tk.Tk):
         self.home = Home("home")
 
         # add rooms to home
-        self.home.add_room("Sitting Room")
-        self.home.add_room("Kitchen")
-        self.home.add_room("Dining Room")
-        self.home.add_room("Bedroom")
+        self.home.add_room("kitchen", False, 21, 50, 50)
+        self.home.add_room("lounge", False, 21, 250, 50)
+        self.home.add_room("bedroomA", False, 21, 50, 250)
+        self.home.add_room("bedroomB", False, 21, 250, 250)
 
-        self.schedule = self.__init_schedule(self.home)
+        self.schedule = self._init_schedule(self.home)
 
-    def __init_schedule(self, home):
+    def _init_schedule(self, home):
         '''
         private
 
@@ -227,7 +198,7 @@ class Core(tk.Tk):
 
         return schedule
 
-    def __loop(self):
+    def _loop(self):
         # extract date and time values from day
         date = self.day.date()
         time = self.day.time().strftime("%H:%M")
@@ -254,15 +225,15 @@ class Core(tk.Tk):
         self.db.add_usage(date, self.home.usage)
 
         # update tkinter vis
-        self.__update_vis()
+        self._update_vis()
 
         # update date and time
-        self.day += datetime.timedelta(minutes=self.__delta)
+        self.day += datetime.timedelta(minutes=self._delta)
 
-        self.after(self.__loop_delta, self.__loop)
+        self.after(self._loop_delta, self._loop)
         pass
 
-    def __update_vis(self):
+    def _update_vis(self):
         '''
         private
 

@@ -24,7 +24,7 @@ class Home:
         - usage[2] tracks whether temperature has decreased between updates
         '''
 
-    def add_room(self, name, light=False, temperature=21):
+    def add_room(self, name, light=False, temperature=21, x=0, y=0):
         '''
         adds a new room to the home.
 
@@ -40,9 +40,9 @@ class Home:
             if room.name == name:
                 raise Exception("Room already exists")
 
-        self.rooms.append(Room(name, light, temperature))
+        self.rooms.append(Room(name, light, temperature, x, y))
 
-    def set_room(self, name, light, temperature):
+    def set_room(self, name, light, temperature, x=None, y=None):
         '''
         instantly sets the state of the specified room to the provided state values
 
@@ -60,6 +60,10 @@ class Home:
             if room.name == name:
                 room.light = light if light is not None else room.light
                 room.temperature = temperature if temperature is not None else room.temperature
+
+                room.x = x if x is not None else room.x
+                room.y = y if y is not None else room.y
+
                 return True
 
         raise Exception("Room does not exist")
@@ -100,11 +104,11 @@ class Home:
                 has_updated = True
 
         # update last usage
-        self.__update_usage()
+        self._update_usage()
 
         return has_updated
 
-    def __update_usage(self):
+    def _update_usage(self):
         '''
         private
 
@@ -122,7 +126,7 @@ class Home:
 
 
 class Room:
-    def __init__(self, name, light, temperature):
+    def __init__(self, name, light, temperature, x, y):
         '''
         creates a new Room object with the specified name, light boolean, and temperature
 
@@ -135,10 +139,11 @@ class Room:
         self.light = light
         self.temperature = temperature
         self.usage = [0, 0, 0]
-        self.x = None
-        self.y = None
 
-        self.__temp_diff = 0
+        self.x = x
+        self.y = y
+
+        self._temp_diff = 0
         '''
         private
 
@@ -162,17 +167,17 @@ class Room:
         # set light to target (since it's just a boolean value)
         self.light = target.light
 
-        # clamp __temp_diff to range [-1 1]
+        # clamp _temp_diff to range [-1 1]
         # TODO: improve this such that we can specify a certain "temperature step" size
-        self.__temp_diff = min(
+        self._temp_diff = min(
             max(target.temperature - self.temperature, -1), 1)
-        self.temperature += self.__temp_diff
+        self.temperature += self._temp_diff
 
-        self.__update_usage()
+        self._update_usage()
 
         return has_updated
 
-    def __update_usage(self):
+    def _update_usage(self):
         '''
         private
 
@@ -180,5 +185,5 @@ class Room:
         '''
 
         self.usage[0] = int(self.light)
-        self.usage[1] = 1 if self.__temp_diff > 0 else 0
-        self.usage[2] = 1 if self.__temp_diff < 0 else 0
+        self.usage[1] = 1 if self._temp_diff > 0 else 0
+        self.usage[2] = 1 if self._temp_diff < 0 else 0
