@@ -61,7 +61,7 @@ class Core(tk.Tk):
         '''
 
         rooms = self.home.rooms
-        self.canvas = tk.Canvas(self, width=500, height=500, bg="white")
+        self.canvas = tk.Canvas(self, width=400, height=400, bg="white")
 
         for room in rooms:
             self._build_tk_room(room)
@@ -101,11 +101,8 @@ class Core(tk.Tk):
         d.pack(side='left', padx=5, pady=5)
 
         # add a text widget to display the word "Hello"
-        self.tempLabel = tk.Label(self, text="")
-        self.tempLabel.pack()
-
-        self.dateLabel = tk.Label(self, text="")
-        self.dateLabel.pack()
+        self.dateLabel = tk.Label(self, text="", font=("Arial 13"))
+        self.dateLabel.pack(side='right')
 
     def _build_tk_room(self, room):
         light_fill = "yellow" if room.light else "cyan"
@@ -113,7 +110,7 @@ class Core(tk.Tk):
         self.canvas.create_rectangle(
             room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill=light_fill)
         self.canvas.create_text(
-            room.x + 100, room.y + 50, text=room.name, tags=room.name + "-label", fill="black", font=('Helvetica 15 bold'))
+            room.x + 100, room.y + 50, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
         self.canvas.create_text(room.x + 100, room.y + 120, text=str(
             room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
 
@@ -132,10 +129,10 @@ class Core(tk.Tk):
         self.home = Home("home")
 
         # add rooms to home
-        self.home.add_room("kitchen", False, 21, 50, 50)
-        self.home.add_room("lounge", False, 21, 250, 50)
-        self.home.add_room("bedroomA", False, 21, 50, 250)
-        self.home.add_room("bedroomB", False, 21, 250, 250)
+        self.home.add_room("Sitting Room", False, 21, 00, 00)
+        self.home.add_room("Kitchen", False, 21, 200, 0)
+        self.home.add_room("Dining Room", False, 21, 0, 200)
+        self.home.add_room("Bedroom", False, 21, 200, 200)
 
         self.schedule = self._init_schedule(self.home)
 
