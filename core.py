@@ -30,7 +30,7 @@ class Core(tk.Tk):
         self.time = None
 
         self.title("Home")
-        self.geometry("1000x800")
+        self.geometry("500x500")
         self.resizable(False, False)
 
         self._init_data()
@@ -44,6 +44,15 @@ class Core(tk.Tk):
         self._loop()
         self.mainloop()
 
+    def update_graphics(self):
+        for room in self.home.rooms:
+            # delete old room data
+            self.canvas.delete(room.name)
+            self.canvas.delete(room.name + "label")
+            self.canvas.delete(room.name + "temp")
+
+            self._build_tk_room(room)
+
     def _init_data(self):
         '''
         private
@@ -54,10 +63,12 @@ class Core(tk.Tk):
         self.db = Database("db")
 
         self.home = Home("home")
-        self.home.add_room("kitchen", False, 19, 50, 50)
-        self.home.add_room("lounge", False, 19, 250, 50)
-        self.home.add_room("bedroomA", False, 22, 50, 250)
-        self.home.add_room("bedroomB", False, 22, 250, 250)
+
+        # add rooms to home
+        self.home.add_room("Sitting Room", False, 21, 0, 0)
+        self.home.add_room("Kitchen", False, 21, 200, 0)
+        self.home.add_room("Dining Room", False, 21, 0, 200)
+        self.home.add_room("Bedroom", False, 21, 200, 200)
 
         self.schedule = self._init_schedule(self.home)
 
@@ -83,39 +94,39 @@ class Core(tk.Tk):
 
         # "wake up" breakpoint
         wakeup_breakpoint = copy.deepcopy(home)  # create a deep copy
-        wakeup_breakpoint.set_room("kitchen", True, 22)
+        wakeup_breakpoint.set_room("Sitting Room", True, 22)
         schedule.set_breakpoint("06:00", wakeup_breakpoint)
 
         # "leave for work"
         leave_breakpoint = copy.deepcopy(home)
-        leave_breakpoint.set_room("kitchen", False, 19)
-        leave_breakpoint.set_room("lounge", False, 19)
-        leave_breakpoint.set_room("bedroomA", False, 19)
-        leave_breakpoint.set_room("bedroomB", False, 19)
+        leave_breakpoint.set_room("Sitting Room", False, 19)
+        leave_breakpoint.set_room("Kitchen", False, 19)
+        leave_breakpoint.set_room("Dining Room", False, 19)
+        leave_breakpoint.set_room("Bedroom", False, 19)
         schedule.set_breakpoint("08:00", leave_breakpoint)
 
         # "arrive from work" breakpoint
         arrive_breakpoint = copy.deepcopy(home)
-        arrive_breakpoint.set_room("kitchen", True, 22)
-        arrive_breakpoint.set_room("lounge", True, 22)
-        arrive_breakpoint.set_room("bedroomA", False, 21)
-        arrive_breakpoint.set_room("bedroomB", False, 21)
+        arrive_breakpoint.set_room("Sitting Room", True, 22)
+        arrive_breakpoint.set_room("Kitchen", True, 22)
+        arrive_breakpoint.set_room("Dining Room", False, 21)
+        arrive_breakpoint.set_room("Bedroom", False, 21)
         schedule.set_breakpoint("17:00", arrive_breakpoint)
 
         # "late night" breakpoint
         late_breakpoint = copy.deepcopy(home)
-        late_breakpoint.set_room("kitchen", False, 19)
-        late_breakpoint.set_room("lounge", False, 22)
-        late_breakpoint.set_room("bedroomA", True, 22)
-        late_breakpoint.set_room("bedroomB", True, 22)
+        late_breakpoint.set_room("Sitting Room", False, 19)
+        late_breakpoint.set_room("Kitchen", False, 22)
+        late_breakpoint.set_room("Dining Room", True, 22)
+        late_breakpoint.set_room("Bedroom", True, 22)
         schedule.set_breakpoint("20:00", late_breakpoint)
 
         # "bedtime" breakpoint
         sleep_breakpoint = copy.deepcopy(home)
-        sleep_breakpoint.set_room("kitchen", False, 19)
-        sleep_breakpoint.set_room("lounge", False, 19)
-        sleep_breakpoint.set_room("bedroomA", False, 21)
-        sleep_breakpoint.set_room("bedroomB", False, 21)
+        sleep_breakpoint.set_room("Sitting Room", False, 19)
+        sleep_breakpoint.set_room("Kitchen", False, 19)
+        sleep_breakpoint.set_room("Dining Room", False, 21)
+        sleep_breakpoint.set_room("Bedroom", False, 21)
         schedule.set_breakpoint("22:00", sleep_breakpoint)
 
         return schedule
@@ -127,10 +138,10 @@ class Core(tk.Tk):
         inits tkinter widgets and builds home from initial home object
         '''
 
-        self.dateLabel = tk.Label(self, text="NaN")
-        self.dateLabel.pack()
+        self.dateLabel = tk.Label(self, text="", font=("Arial 13"))
+        self.dateLabel.pack(side="right")
 
-        self.canvas = tk.Canvas(self, width=500, height=500, bg="white")
+        self.canvas = tk.Canvas(self, width=400, height=400, bg="white")
         self.canvas.pack()
 
         for room in self.home.rooms:
@@ -138,7 +149,7 @@ class Core(tk.Tk):
 
             room_override = tk.Button(
                 self, text=room.name, command=lambda: self._get_user_input(room))
-            room_override.pack()
+            room_override.pack(side='left', padx=5, pady=5)
 
     def _get_user_input(self, room):
         sys_init(room)
