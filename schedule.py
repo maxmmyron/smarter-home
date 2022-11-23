@@ -26,7 +26,7 @@ class Schedule:
 
         self.breakpoints[time] = home
 
-    def get_last_breakpoint(self, time):
+    def get_breakpoint(self, time):
         '''
         gets the last matching breakpoint before the specified time
 

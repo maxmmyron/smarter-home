@@ -155,7 +155,8 @@ class Core(tk.Tk):
         kitchen_override.pack(side='left', padx=5, pady=5)
         dining_room_override.pack(side='left', padx=5, pady=5)
         bedroom_override.pack(side='left', padx=5, pady=5)
-        dataButton = tk.Button(self,text="Database",command=lambda: self.db.get_usage(datetime.date.today()))
+        dataButton = tk.Button(
+            self, text="Database", command=lambda: self.db.get_usage(datetime.date.today()))
         dataButton.pack(side='left', padx=5, pady=5)
 
     def _get_user_input(self, room):
@@ -198,8 +199,8 @@ class Core(tk.Tk):
         input_state = None
 
         # get the schedule breakpoint current day
-        # TODO: implement as "get_last_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
-        schedule_state = self.schedule.get_last_breakpoint(time)
+        # TODO: implement as "get_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
+        schedule_state = self.schedule.get_breakpoint(time)
         if schedule_state == self.home:
             schedule_state = None
 
@@ -207,7 +208,6 @@ class Core(tk.Tk):
         # otherwise set target state to schedule state
         # otherwise set target state to current state (no change)
         target = input_state if input_state is not None else schedule_state if schedule_state is not None else self.home
-
 
         # update closer to target state
         self.home.update(target)
