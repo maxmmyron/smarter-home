@@ -30,7 +30,7 @@ class Core(tk.Tk):
         self.time = None
 
         self.title("Home")
-        self.geometry("1000x800")
+        self.geometry("500x500")
         self.resizable(False, False)
 
         self.__init_data()
@@ -70,42 +70,42 @@ class Core(tk.Tk):
         '''
 
         rooms = self.home.rooms
-        self.my_canvas = tk.Canvas(self, width=500, height=500, bg="white")
+        self.my_canvas = tk.Canvas(self, width=400, height=400, bg="white")
 
         self.my_canvas.create_rectangle(
-            50, 50, 250, 250, tags=rooms[0].name, fill="cyan")
-        rooms[0].x = 50
-        rooms[0].y = 50
+            0, 0, 200, 200, tags=rooms[0].name, fill="cyan")
+        rooms[0].x = 0
+        rooms[0].y = 0
         self.my_canvas.create_text(
-            150, 100, text=rooms[0].name, tags=rooms[0].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(150, 170, text=str(
+            100, 50, text=rooms[0].name, tags=rooms[0].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(100, 120, text=str(
             rooms[0].temperature), tags=rooms[0].name + "temp", fill="red", font=('Helvetica 15 bold'))
 
         self.my_canvas.create_rectangle(
-            250, 50, 450, 250, tags=rooms[1].name, fill="cyan")
-        rooms[1].x = 250
-        rooms[1].y = 50
+            200, 0, 400, 200, tags=rooms[1].name, fill="cyan")
+        rooms[1].x = 200
+        rooms[1].y = 0
         self.my_canvas.create_text(
-            350, 100, text=rooms[1].name, tags=rooms[1].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(350, 170, text=str(
+            300, 50, text=rooms[1].name, tags=rooms[1].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(300, 120, text=str(
             rooms[1].temperature), tags=rooms[1].name + "temp", fill="red", font=('Helvetica 15 bold'))
 
         self.my_canvas.create_rectangle(
-            50, 250, 250, 450, tags=rooms[2].name, fill="cyan")
-        rooms[2].x = 50
-        rooms[2].y = 250
+            0, 200, 200, 400, tags=rooms[2].name, fill="cyan")
+        rooms[2].x = 0
+        rooms[2].y = 200
         self.my_canvas.create_text(
-            150, 300, text=rooms[2].name, tags=rooms[2].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(150, 370, text=str(
+            100, 250, text=rooms[2].name, tags=rooms[2].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(100, 320, text=str(
             rooms[2].temperature), tags=rooms[2].name + "temp", fill="red", font=('Helvetica 15 bold'))
 
         self.my_canvas.create_rectangle(
-            250, 250, 450, 450, tags=rooms[3].name, fill="cyan")
-        rooms[3].x = 250
-        rooms[3].y = 250
+            200, 200, 400, 400, tags=rooms[3].name, fill="cyan")
+        rooms[3].x = 200
+        rooms[3].y = 200
         self.my_canvas.create_text(
-            350, 300, text=rooms[3].name, tags=rooms[3].name + "label", fill="black", font=('Helvetica 15 bold'))
-        self.my_canvas.create_text(350, 370, text=str(
+            300, 250, text=rooms[3].name, tags=rooms[3].name + "label", fill="black", font=('Helvetica 15 bold'))
+        self.my_canvas.create_text(300, 320, text=str(
             rooms[3].temperature), tags=rooms[3].name + "temp", fill="red", font=('Helvetica 15 bold'))
         self.my_canvas.pack()
 
@@ -119,8 +119,8 @@ class Core(tk.Tk):
             else:
                 self.my_canvas.create_rectangle(
                     room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
-            tempX = room.x + 100
-            tempY = room.y + 50
+            tempX = room.x + 50
+            tempY = room.y + 25
             self.my_canvas.delete(room.name + "label")
             self.my_canvas.create_text(
                 tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
@@ -136,17 +136,15 @@ class Core(tk.Tk):
                       command=lambda: user_input(self, rooms[2]))
         d = tk.Button(self, text=rooms[3].name,
                       command=lambda: user_input(self, rooms[3]))
-        a.pack()
-        b.pack()
-        c.pack()
-        d.pack()
+        a.pack(side='left', padx=5, pady=5)
+        b.pack(side='left', padx=5, pady=5)
+        c.pack(side='left', padx=5, pady=5)
+        d.pack(side='left', padx=5, pady=5)
 
         # add a text widget to display the word "Hello"
-        self.tempLabel = tk.Label(self, text="")
-        self.tempLabel.pack()
 
-        self.dateLabel = tk.Label(self, text="")
-        self.dateLabel.pack()
+        self.dateLabel = tk.Label(self, text="", width=30, font=[('Arial 10')])
+        self.dateLabel.pack(side='right')
 
     def __init_data(self):
         '''
@@ -163,10 +161,10 @@ class Core(tk.Tk):
         self.home = Home("home")
 
         # add rooms to home
-        self.home.add_room("kitchen")
-        self.home.add_room("lounge")
-        self.home.add_room("bedroomA")
-        self.home.add_room("bedroomB")
+        self.home.add_room("Sitting Room")
+        self.home.add_room("Kitchen")
+        self.home.add_room("Dining Room")
+        self.home.add_room("Bedroom")
 
         self.schedule = self.__init_schedule(self.home)
 
@@ -192,39 +190,39 @@ class Core(tk.Tk):
 
         # "wake up" breakpoint
         wakeup_breakpoint = copy.deepcopy(home)  # create a deep copy
-        wakeup_breakpoint.set_room("kitchen", True, 22)
+        wakeup_breakpoint.set_room("Sitting Room", True, 22)
         schedule.add_breakpoint("06:00", wakeup_breakpoint)
 
         # "leave for work"
         leave_breakpoint = copy.deepcopy(home)
-        leave_breakpoint.set_room("kitchen", False, 19)
-        leave_breakpoint.set_room("lounge", False, 19)
-        leave_breakpoint.set_room("bedroomA", False, 19)
-        leave_breakpoint.set_room("bedroomB", False, 19)
+        leave_breakpoint.set_room("Sitting Room", False, 19)
+        leave_breakpoint.set_room("Kitchen", False, 19)
+        leave_breakpoint.set_room("Dining Room", False, 19)
+        leave_breakpoint.set_room("Bedroom", False, 19)
         schedule.add_breakpoint("08:00", leave_breakpoint)
 
         # "arrive from work" breakpoint
         arrive_breakpoint = copy.deepcopy(home)
-        arrive_breakpoint.set_room("kitchen", True, 22)
-        arrive_breakpoint.set_room("lounge", True, 22)
-        arrive_breakpoint.set_room("bedroomA", False, 21)
-        arrive_breakpoint.set_room("bedroomB", False, 21)
+        arrive_breakpoint.set_room("Sitting Room", True, 22)
+        arrive_breakpoint.set_room("Kitchen", True, 22)
+        arrive_breakpoint.set_room("Dining Room", False, 21)
+        arrive_breakpoint.set_room("Bedroom", False, 21)
         schedule.add_breakpoint("17:00", arrive_breakpoint)
 
         # "late night" breakpoint
         late_breakpoint = copy.deepcopy(home)
-        late_breakpoint.set_room("kitchen", False, 19)
-        late_breakpoint.set_room("lounge", False, 22)
-        late_breakpoint.set_room("bedroomA", True, 22)
-        late_breakpoint.set_room("bedroomB", True, 22)
+        late_breakpoint.set_room("Sitting Room", False, 19)
+        late_breakpoint.set_room("Kitchen", False, 22)
+        late_breakpoint.set_room("Dining Room", True, 22)
+        late_breakpoint.set_room("Bedroom", True, 22)
         schedule.add_breakpoint("20:00", late_breakpoint)
 
         # "bedtime" breakpoint
         sleep_breakpoint = copy.deepcopy(home)
-        sleep_breakpoint.set_room("kitchen", False, 19)
-        sleep_breakpoint.set_room("lounge", False, 19)
-        sleep_breakpoint.set_room("bedroomA", False, 21)
-        sleep_breakpoint.set_room("bedroomB", False, 21)
+        sleep_breakpoint.set_room("Sitting Room", False, 19)
+        sleep_breakpoint.set_room("Kitchen", False, 19)
+        sleep_breakpoint.set_room("Dining Room", False, 21)
+        sleep_breakpoint.set_room("Bedroom", False, 21)
         schedule.add_breakpoint("22:00", sleep_breakpoint)
 
         return schedule
@@ -272,7 +270,6 @@ class Core(tk.Tk):
         '''
 
         # update label
-        self.tempLabel.config(text=self.home.rooms[0].temperature)
         self.dateLabel.config(text=self.day.strftime("%d/%m/%Y %H:%M"))
 
 
