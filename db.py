@@ -72,4 +72,4 @@ class Database:
         if date not in self.usage:
             return None
 
-        return self.usage[date]
+        print(self.usage)
