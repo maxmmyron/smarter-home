@@ -24,6 +24,12 @@ class Home:
         - usage[2] tracks whether temperature has decreased between updates
         '''
 
+    def equals(self, home):
+        for i in range(len(self.rooms)):
+            if self.rooms[i] != home.rooms[i]:
+                return False
+        return True
+
     def add_room(self, name, light=False, temperature=21, x=0, y=0):
         '''
         adds a new room to the home.
@@ -150,6 +156,12 @@ class Room:
         tracks the last difference between the target temperature and the current temperature.
         used to calculate usage statistics.
         '''
+
+    def __eq__(self, room):
+        if self.light == room.light and self.temperature == room.temperature:
+            return True
+        else:
+            return False
 
     # updates the room state to match closer to the target room state
     def update(self, target):

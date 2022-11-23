@@ -15,15 +15,16 @@ class Core(tk.Tk):
     home = None
     db = None
     schedule = None
+    schedule_state = None
 
     _tod = datetime.date.today()
 
     day = datetime.datetime(
         year=_tod.year, month=_tod.month, day=_tod.day, hour=0, minute=0)
 
-    _delta = 10
+    _delta = 30
 
-    _loop_delta = 500
+    _loop_delta = 300
 
     def __init__(self):
         super().__init__()
@@ -198,14 +199,19 @@ class Core(tk.Tk):
 
         # get the schedule breakpoint current day
         # TODO: implement as "get_last_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
-        schedule_state = self.schedule.get_last_breakpoint(time)
-        if schedule_state == self.home:
-            schedule_state = None
+
+        
+        if self.schedule_state != None:
+            if self.schedule_state.equals(self.home):
+                self.schedule_state = None
+        else:
+            self.schedule_state = self.schedule.get_last_breakpoint(time)
+            
 
         # set target state to input state if input state is not None
         # otherwise set target state to schedule state
         # otherwise set target state to current state (no change)
-        target = input_state if input_state is not None else schedule_state if schedule_state is not None else self.home
+        target = input_state if input_state is not None else self.schedule_state if self.schedule_state is not None else self.home
 
 
         # update closer to target state
