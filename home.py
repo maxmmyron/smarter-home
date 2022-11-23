@@ -24,7 +24,7 @@ class Home:
         - usage[2] tracks whether temperature has decreased between updates
         '''
 
-    def add_room(self, name, light=False, temperature=21):
+    def add_room(self, name, light=False, temperature=21, x=0, y=0):
         '''
         adds a new room to the home.
 
@@ -40,9 +40,9 @@ class Home:
             if room.name == name:
                 raise Exception("Room already exists")
 
-        self.rooms.append(Room(name, light, temperature))
+        self.rooms.append(Room(name, light, temperature, x, y))
 
-    def set_room(self, name, light, temperature):
+    def set_room(self, name, light, temperature, x=None, y=None):
         '''
         instantly sets the state of the specified room to the provided state values
 
@@ -60,6 +60,10 @@ class Home:
             if room.name == name:
                 room.light = light if light is not None else room.light
                 room.temperature = temperature if temperature is not None else room.temperature
+
+                room.x = x if x is not None else room.x
+                room.y = y if y is not None else room.y
+
                 return True
 
         raise Exception("Room does not exist")
@@ -122,7 +126,7 @@ class Home:
 
 
 class Room:
-    def __init__(self, name, light, temperature):
+    def __init__(self, name, light, temperature, x, y):
         '''
         creates a new Room object with the specified name, light boolean, and temperature
 
@@ -135,8 +139,9 @@ class Room:
         self.light = light
         self.temperature = temperature
         self.usage = [0, 0, 0]
-        self.x = None
-        self.y = None
+
+        self.x = x
+        self.y = y
 
         self.__temp_diff = 0
         '''
