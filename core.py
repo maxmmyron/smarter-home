@@ -44,79 +44,6 @@ class Core(tk.Tk):
         self._loop()
         self.mainloop()
 
-    def update_graphics(self):
-        for room in self.home.rooms:
-            # delete old room data
-            self.canvas.delete(room.name)
-            self.canvas.delete(room.name + "label")
-            self.canvas.delete(room.name + "temp")
-
-            self._build_tk_room(room)
-
-    def _init_vis(self):
-        '''
-        private
-
-        inits tkinter widgets and builds home from initial home object
-        '''
-
-        rooms = self.home.rooms
-        self.canvas = tk.Canvas(self, width=500, height=500, bg="white")
-
-        for room in rooms:
-            self._build_tk_room(room)
-
-        self.canvas.pack()
-
-        def user_input(self, room):
-            sys_init(room)
-
-            self.canvas.delete(room.name)
-            if room.light == 1:
-                self.canvas.create_rectangle(
-                    room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="yellow")
-            else:
-                self.canvas.create_rectangle(
-                    room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill="cyan")
-            tempX = room.x + 100
-            tempY = room.y + 50
-            self.canvas.delete(room.name + "label")
-            self.canvas.create_text(
-                tempX, tempY, text=room.name, tags=room.name + "label", fill="black", font=('Helvetica 15 bold'))
-            self.canvas.delete(room.name + "temp")
-            self.canvas.create_text(tempX, tempY + 70, text=str(
-                room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
-
-        a = tk.Button(self, text=rooms[0].name,
-                      command=lambda: user_input(self, rooms[0]))
-        b = tk.Button(self, text=rooms[1].name,
-                      command=lambda: user_input(self, rooms[1]))
-        c = tk.Button(self, text=rooms[2].name,
-                      command=lambda: user_input(self, rooms[2]))
-        d = tk.Button(self, text=rooms[3].name,
-                      command=lambda: user_input(self, rooms[3]))
-        a.pack()
-        b.pack()
-        c.pack()
-        d.pack()
-
-        # add a text widget to display the word "Hello"
-        self.tempLabel = tk.Label(self, text="")
-        self.tempLabel.pack()
-
-        self.dateLabel = tk.Label(self, text="")
-        self.dateLabel.pack()
-
-    def _build_tk_room(self, room):
-        light_fill = "yellow" if room.light else "cyan"
-
-        self.canvas.create_rectangle(
-            room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill=light_fill)
-        self.canvas.create_text(
-            room.x + 100, room.y + 50, text=room.name, tags=room.name + "-label", fill="black", font=('Helvetica 15 bold'))
-        self.canvas.create_text(room.x + 100, room.y + 120, text=str(
-            room.temperature), tags=room.name + "temp", fill="red", font=('Helvetica 15 bold'))
-
     def _init_data(self):
         '''
         private
@@ -124,18 +51,13 @@ class Core(tk.Tk):
         inits db, home, and schedule
         '''
 
-        # init db
         self.db = Database("db")
 
-        # init home & rooms
-        # initial home state is home at 00:00
         self.home = Home("home")
-
-        # add rooms to home
-        self.home.add_room("kitchen", False, 21, 50, 50)
-        self.home.add_room("lounge", False, 21, 250, 50)
-        self.home.add_room("bedroomA", False, 21, 50, 250)
-        self.home.add_room("bedroomB", False, 21, 250, 250)
+        self.home.add_room("kitchen", False, 19, 50, 50)
+        self.home.add_room("lounge", False, 19, 250, 50)
+        self.home.add_room("bedroomA", False, 22, 50, 250)
+        self.home.add_room("bedroomB", False, 22, 250, 250)
 
         self.schedule = self._init_schedule(self.home)
 
@@ -162,7 +84,7 @@ class Core(tk.Tk):
         # "wake up" breakpoint
         wakeup_breakpoint = copy.deepcopy(home)  # create a deep copy
         wakeup_breakpoint.set_room("kitchen", True, 22)
-        schedule.add_breakpoint("06:00", wakeup_breakpoint)
+        schedule.set_breakpoint("06:00", wakeup_breakpoint)
 
         # "leave for work"
         leave_breakpoint = copy.deepcopy(home)
@@ -170,7 +92,7 @@ class Core(tk.Tk):
         leave_breakpoint.set_room("lounge", False, 19)
         leave_breakpoint.set_room("bedroomA", False, 19)
         leave_breakpoint.set_room("bedroomB", False, 19)
-        schedule.add_breakpoint("08:00", leave_breakpoint)
+        schedule.set_breakpoint("08:00", leave_breakpoint)
 
         # "arrive from work" breakpoint
         arrive_breakpoint = copy.deepcopy(home)
@@ -178,7 +100,7 @@ class Core(tk.Tk):
         arrive_breakpoint.set_room("lounge", True, 22)
         arrive_breakpoint.set_room("bedroomA", False, 21)
         arrive_breakpoint.set_room("bedroomB", False, 21)
-        schedule.add_breakpoint("17:00", arrive_breakpoint)
+        schedule.set_breakpoint("17:00", arrive_breakpoint)
 
         # "late night" breakpoint
         late_breakpoint = copy.deepcopy(home)
@@ -186,7 +108,7 @@ class Core(tk.Tk):
         late_breakpoint.set_room("lounge", False, 22)
         late_breakpoint.set_room("bedroomA", True, 22)
         late_breakpoint.set_room("bedroomB", True, 22)
-        schedule.add_breakpoint("20:00", late_breakpoint)
+        schedule.set_breakpoint("20:00", late_breakpoint)
 
         # "bedtime" breakpoint
         sleep_breakpoint = copy.deepcopy(home)
@@ -194,9 +116,59 @@ class Core(tk.Tk):
         sleep_breakpoint.set_room("lounge", False, 19)
         sleep_breakpoint.set_room("bedroomA", False, 21)
         sleep_breakpoint.set_room("bedroomB", False, 21)
-        schedule.add_breakpoint("22:00", sleep_breakpoint)
+        schedule.set_breakpoint("22:00", sleep_breakpoint)
 
         return schedule
+
+    def _init_vis(self):
+        '''
+        private
+
+        inits tkinter widgets and builds home from initial home object
+        '''
+
+        self.dateLabel = tk.Label(self, text="NaN")
+        self.dateLabel.pack()
+
+        self.canvas = tk.Canvas(self, width=500, height=500, bg="white")
+        self.canvas.pack()
+
+        for room in self.home.rooms:
+            self._build_tk_room(room)
+
+            room_override = tk.Button(
+                self, text=room.name, command=lambda: self._get_user_input(room))
+            room_override.pack()
+
+    def _get_user_input(self, room):
+        sys_init(room)
+
+        self.canvas.delete(room.name)
+        self.canvas.delete(room.name + "_label")
+        self.canvas.delete(room.name + "_temp")
+
+        self._build_tk_room(room)
+
+    def _build_tk_room(self, room):
+        light_fill = "yellow" if room.light else "cyan"
+
+        self.canvas.create_rectangle(
+            room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill=light_fill)
+        self.canvas.create_text(
+            room.x + 100, room.y + 50, text=room.name, tags=room.name + "_label", fill="black", font=('Helvetica 15 bold'))
+        self.canvas.create_text(room.x + 100, room.y + 120, text=str(
+            room.temperature), tags=room.name + "_temp", fill="red", font=('Helvetica 15 bold'))
+
+    def _draw(self):
+        self.dateLabel.config(text=self.day.strftime("%d/%m/%Y %H:%M"))
+
+        for room in self.home.rooms:
+            # delete old room data
+            self.canvas.delete(room.name)
+            self.canvas.delete(room.name + "_label")
+            self.canvas.delete(room.name + "_temp")
+
+            self._build_tk_room(room)
 
     def _loop(self):
         # extract date and time values from day
@@ -217,32 +189,17 @@ class Core(tk.Tk):
         target = input_state if input_state is not None else schedule_state if schedule_state is not None else self.home
 
         # update closer to target state
-        update_check = self.home.update(target)
-        if update_check == True:
-            self.update_graphics()
+        self.home.update(target)
+
+        self._draw()
 
         # add current state to db
         self.db.add_usage(date, self.home.usage)
-
-        # update tkinter vis
-        self._update_vis()
 
         # update date and time
         self.day += datetime.timedelta(minutes=self._delta)
 
         self.after(self._loop_delta, self._loop)
-        pass
-
-    def _update_vis(self):
-        '''
-        private
-
-        updates tkinter widgets
-        '''
-
-        # update label
-        self.tempLabel.config(text=self.home.rooms[0].temperature)
-        self.dateLabel.config(text=self.day.strftime("%d/%m/%Y %H:%M"))
 
 
 if __name__ == "__main__":
