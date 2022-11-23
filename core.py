@@ -21,9 +21,9 @@ class Core(tk.Tk):
     day = datetime.datetime(
         year=_tod.year, month=_tod.month, day=_tod.day, hour=0, minute=0)
 
-    _delta = 60
+    _delta = 10
 
-    _loop_delta = 1200
+    _loop_delta = 1500
 
     def __init__(self):
         super().__init__()
@@ -140,9 +140,18 @@ class Core(tk.Tk):
         for room in self.home.rooms:
             self._build_tk_room(room)
 
-            room_override = tk.Button(
-                self, text=room.name, command=lambda: self._get_user_input(room))
-            room_override.pack(side='left', padx=5, pady=5)
+        sitting_room_override = tk.Button(
+            self, text=self.home.rooms[0].name, command=lambda: self._get_user_input(self.home.rooms[0]))
+        kitchen_override = tk.Button(
+            self, text=self.home.rooms[1].name, command=lambda: self._get_user_input(self.home.rooms[1]))
+        dining_room_override = tk.Button(
+            self, text=self.home.rooms[2].name, command=lambda: self._get_user_input(self.home.rooms[2]))
+        bedroom_override = tk.Button(
+            self, text=self.home.rooms[3].name, command=lambda: self._get_user_input(self.home.rooms[3]))
+        sitting_room_override.pack(side='left', padx=5, pady=5)
+        kitchen_override.pack(side='left', padx=5, pady=5)
+        dining_room_override.pack(side='left', padx=5, pady=5)
+        bedroom_override.pack(side='left', padx=5, pady=5)
 
     def _get_user_input(self, room):
         sys_init(room)
