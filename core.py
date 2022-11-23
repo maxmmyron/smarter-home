@@ -184,7 +184,7 @@ class Core(tk.Tk):
         schedule = Schedule()
 
         # NOTE: we can conveniently copy the home object
-        # to create breakpoints. However since = assignmenre
+        # to create breakpoints. However since = assignment
         # only creates a reference to the original object
         # and we don't want to change the original home state,
         # we need to use deepcopy() to create a copy that
