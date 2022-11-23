@@ -75,4 +75,4 @@ class Database:
         return self.usage[date]
         
     def print_usage(self):
-        print(self.usage)
+        print("Usage Info",self.usage)

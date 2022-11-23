@@ -151,11 +151,11 @@ class Core(tk.Tk):
             self, text=self.home.rooms[2].name, command=lambda: self._get_user_input(self.home.rooms[2]))
         bedroom_override = tk.Button(
             self, text=self.home.rooms[3].name, command=lambda: self._get_user_input(self.home.rooms[3]))
+        dataButton = tk.Button(self,text="Database",command=lambda: self.db.print_usage())
         sitting_room_override.pack(side='left', padx=5, pady=5)
         kitchen_override.pack(side='left', padx=5, pady=5)
         dining_room_override.pack(side='left', padx=5, pady=5)
         bedroom_override.pack(side='left', padx=5, pady=5)
-        dataButton = tk.Button(self,text="Database",command=lambda: self.db.print_usage())
         dataButton.pack(side='left', padx=5, pady=5)
 
     def _get_user_input(self, room):
