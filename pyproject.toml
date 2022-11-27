@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smarter-home"
+version = "1.d3"
+authors = [
+  { name="Robert Coughlan" },
+  { name="Max Myron" },
+  { name="Aria Shahi" },
+  { name="Junhao Zhang" }
+]
+description = "CS3500 smart home control system"
+readme = "README.md"
+requires-python = ">=3.6"
+
+[project.urls]
+homepage = "https://github.com/maxmmyron/smarter-home"
+repository = "https://github.com/maxmmyron/smarter-home"
