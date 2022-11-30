@@ -8,7 +8,7 @@ import tkinter as tk
 from home import Home
 from db import Database
 from schedule import Schedule
-from user_input import sys_init
+from user_input import construct_user_state
 
 
 class Core(tk.Tk):
@@ -22,9 +22,12 @@ class Core(tk.Tk):
     day = datetime.datetime(
         year=_tod.year, month=_tod.month, day=_tod.day, hour=0, minute=0)
 
-    _delta = 15
+    _delta = 10
 
-    _loop_delta = 1200
+    _loop_delta = 500
+
+    # user override state
+    input_state = None
 
     def __init__(self):
         super().__init__()
@@ -144,30 +147,20 @@ class Core(tk.Tk):
         for room in self.home.rooms:
             self._build_tk_room(room)
 
-        sitting_room_override = tk.Button(
-            self, text=self.home.rooms[0].name, command=lambda: self._get_user_input(self.home.rooms[0]))
-        kitchen_override = tk.Button(
-            self, text=self.home.rooms[1].name, command=lambda: self._get_user_input(self.home.rooms[1]))
-        dining_room_override = tk.Button(
-            self, text=self.home.rooms[2].name, command=lambda: self._get_user_input(self.home.rooms[2]))
-        bedroom_override = tk.Button(
-            self, text=self.home.rooms[3].name, command=lambda: self._get_user_input(self.home.rooms[3]))
-        dataButton = tk.Button(self, text="Database",
-                               command=lambda: self.db.print_usage())
-        sitting_room_override.pack(side='left', padx=5, pady=5)
-        kitchen_override.pack(side='left', padx=5, pady=5)
-        dining_room_override.pack(side='left', padx=5, pady=5)
-        bedroom_override.pack(side='left', padx=5, pady=5)
-        dataButton.pack(side='left', padx=5, pady=5)
+        button_frame = tk.Frame(self)
+        button_frame.pack(side="bottom", fill="both",
+                          expand=True, padx=10, pady=10)
 
-    def _get_user_input(self, room):
-        sys_init(room)
+        state_override_button = tk.Button(
+            button_frame, text="Override State", command=self._override_state)
+        state_override_button.pack(anchor=tk.CENTER, padx=5, pady=5)
 
-        self.canvas.delete(room.name)
-        self.canvas.delete(room.name + "_label")
-        self.canvas.delete(room.name + "_temp")
+        data_button = tk.Button(button_frame, text="Database",
+                                command=lambda: self.db.print_usage())
+        data_button.pack(anchor=tk.CENTER, padx=5, pady=5)
 
-        self._build_tk_room(room)
+    def _override_state(self):
+        self.input_state = construct_user_state(self, self.home)
 
     def _build_tk_room(self, room):
         light_fill = "yellow" if room.light else "cyan"
@@ -176,7 +169,7 @@ class Core(tk.Tk):
             room.x, room.y, room.x + 200, room.y + 200, tags=room.name, fill=light_fill)
         self.canvas.create_text(
             room.x + 100, room.y + 50, text=room.name, tags=room.name + "_label", fill="black", font=('Helvetica 15 bold'))
-        self.canvas.create_text(room.x + 100, room.y + 120, text=str(
+        self.canvas.create_text(room.x + 100, room.y + 120, text="{:.2f}".format(
             room.temperature), tags=room.name + "_temp", fill="red", font=('Helvetica 15 bold'))
 
     def _draw(self):
@@ -190,29 +183,27 @@ class Core(tk.Tk):
 
             self._build_tk_room(room)
 
+    _last_schedule_state = None
+
     def _loop(self):
         # extract date and time values from day
         date = self.day.date()
         time = self.day.time().strftime("%H:%M")
         self.time = time
 
-        # TODO: switch user input sys_init function to return a target object,
-        # instead of immediately editing current home object
-        input_state = None
-
-        # get the schedule breakpoint current day
-        # TODO: implement as "get_last_breakpoint()" such that it will continue to return the last breakpoint even if time has passed.
-
-        if self.schedule_state != None:
-            if self.schedule_state.equals(self.home):
-                self.schedule_state = None
-        else:
-            self.schedule_state = self.schedule.get_last_breakpoint(time)
+        schedule_state = self.schedule.get_last_breakpoint(time)
+        if (schedule_state != self._last_schedule_state):
+            # account for day change
+            if (not bool(schedule_state)):
+                schedule_state = self._last_schedule_state
+            else:
+                self._last_schedule_state = schedule_state
+                self.input_state = None
 
         # set target state to input state if input state is not None
         # otherwise set target state to schedule state
-        # otherwise set target state to current state (no change)
-        target = input_state if input_state is not None else self.schedule_state if self.schedule_state is not None else self.home
+        # otherwise, set target state to current state (no change)
+        target = self.input_state if self.input_state is not None else schedule_state if schedule_state is not None else self.home
 
         # update closer to target state
         self.home.update(target)
