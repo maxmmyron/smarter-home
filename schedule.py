@@ -42,7 +42,7 @@ class Schedule:
         last_breakpoint = None
 
         for breakpoint in self.breakpoints:
-            if breakpoint == time:
+            if breakpoint <= time:
                 last_breakpoint = self.breakpoints[breakpoint]
             if breakpoint > time:
                 break
