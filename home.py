@@ -24,6 +24,9 @@ class Home:
         - usage[2] tracks whether temperature has decreased between updates
         '''
 
+        self.temp_step = 0.1
+        self.light_step = 0.1
+
     def equals(self, home):
         for i in range(len(self.rooms)):
             if self.rooms[i] != home.rooms[i]:
@@ -132,7 +135,7 @@ class Home:
 
 
 class Room:
-    def __init__(self, name, light, temperature, x, y):
+    def __init__(self, name, light, temperature, x, y, temp_step=0.1, light_step=0.1):
         '''
         creates a new Room object with the specified name, light boolean, and temperature
 
@@ -150,6 +153,9 @@ class Room:
 
         self.x = x
         self.y = y
+
+        self.temp_step = temp_step
+        self.light_step = light_step
 
         self._temp_diff = 0
         '''
@@ -181,9 +187,9 @@ class Room:
         # set light to target (since it's just a boolean value)
         self.light = target.light
 
-        # clamp _temp_diff to range [-1 1] to prevent overshoot
+        # clamp temp_diff to tempstemp range to prevent overshoot
         self._temp_diff = min(
-            max(target.temperature - self.temperature, -1), 1)
+            max(target.temperature - self.temperature, -self.temp_step), self.temp_step)
         self.temperature += self._temp_diff
 
         self._update_usage()
