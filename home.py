@@ -24,7 +24,7 @@ class Home:
         - usage[2] tracks whether temperature has decreased between updates
         '''
 
-        self.temp_step = 0.1
+        self.temp_step = 1
         self.light_step = 0.1
 
     def equals(self, home):
@@ -135,7 +135,7 @@ class Home:
 
 
 class Room:
-    def __init__(self, name, light, temperature, x, y, temp_step=0.1, light_step=0.1):
+    def __init__(self, name, light, temperature, x, y, temp_step=1, light_step=0.1):
         '''
         creates a new Room object with the specified name, light boolean, and temperature
 
