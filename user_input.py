@@ -8,7 +8,7 @@ def construct_user_state(tk_root, initial_state):
     # init popup window
     popup = tk.Toplevel(tk_root)
     popup.title("User Input")
-    popup.geometry("600x500")
+    popup.geometry("400x200")
 
     # construct widgets
 
@@ -30,7 +30,7 @@ def _construct_user_room_state(tk_root, room):
 
     popup = tk.Toplevel(tk_root)
     popup.title("Set " + room.name + " State")
-    popup.geometry("600x500")
+    popup.geometry("400x200")
 
     # construct widgets
     left_frame = tk.Frame(popup)
