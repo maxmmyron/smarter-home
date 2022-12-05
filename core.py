@@ -22,9 +22,9 @@ class Core(tk.Tk):
     day = datetime.datetime(
         year=_tod.year, month=_tod.month, day=_tod.day, hour=0, minute=0)
 
-    _delta = 10
+    _delta = 5
 
-    _loop_delta = 500
+    _loop_delta = 1500
 
     # user override state
     input_state = None
