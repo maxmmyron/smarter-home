@@ -24,7 +24,7 @@ class Core(tk.Tk):
 
     _delta = 10
 
-    _loop_delta = 500
+    _loop_delta = 750
 
     # user override state
     input_state = None
@@ -102,7 +102,7 @@ class Core(tk.Tk):
         leave_breakpoint.set_room("Kitchen", False, 19)
         leave_breakpoint.set_room("Dining Room", False, 19)
         leave_breakpoint.set_room("Bedroom", False, 19)
-        schedule.set_breakpoint("08:00", leave_breakpoint)
+        schedule.set_breakpoint("07:00", leave_breakpoint)
 
         # "arrive from work" breakpoint
         arrive_breakpoint = copy.deepcopy(home)
@@ -110,7 +110,7 @@ class Core(tk.Tk):
         arrive_breakpoint.set_room("Kitchen", True, 22)
         arrive_breakpoint.set_room("Dining Room", False, 21)
         arrive_breakpoint.set_room("Bedroom", False, 21)
-        schedule.set_breakpoint("17:00", arrive_breakpoint)
+        schedule.set_breakpoint("18:00", arrive_breakpoint)
 
         # "late night" breakpoint
         late_breakpoint = copy.deepcopy(home)
