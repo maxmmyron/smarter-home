@@ -12,13 +12,22 @@ def construct_user_state(tk_root, initial_state):
 
     # construct widgets
 
-    for room in state.rooms:
-        room_button = tk.Button(popup, text=room.name,
-                                command=lambda: _construct_user_room_state(popup, room))
-        room_button.pack()
+    sitting_room_override = tk.Button(
+        popup, text=state.rooms[0].name, command=lambda: _construct_user_room_state(popup, state.rooms[0]))
+    kitchen_override = tk.Button(
+        popup, text=state.rooms[1].name, command=lambda: _construct_user_room_state(popup, state.rooms[1]))
+    dining_room_override = tk.Button(
+        popup, text=state.rooms[2].name, command=lambda: _construct_user_room_state(popup, state.rooms[2]))
+    bedroom_override = tk.Button(
+        popup, text=state.rooms[3].name, command=lambda: _construct_user_room_state(popup, state.rooms[3]))
+    sitting_room_override.pack(side='left', padx=10, pady=5)
+    kitchen_override.pack(side='left', padx=5, pady=5)
+    dining_room_override.pack(side='left', padx=5, pady=5)
+    bedroom_override.pack(side='left', padx=5, pady=5)
+
 
     finish_button = tk.Button(popup, text="Finish", command=popup.destroy)
-    finish_button.pack()
+    finish_button.pack(side='left', padx=5, pady=5)
 
     # returns state after mainloop finishes (on popup destroy)
     return state
@@ -56,7 +65,7 @@ def _construct_user_room_state(tk_root, room):
 
     def set_temp(flip):
         nonlocal temp
-        temp = float("{:.2f}".format(temp + flip*room.temp_step))
+        temp = (temp + (flip*room.temp_step))
         temperature_target_label.config(text="Target Temp: " + str(temp))
 
     tk.Label(right_frame, text="Light").pack()
