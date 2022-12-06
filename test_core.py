@@ -30,7 +30,7 @@ class TestCore(unittest.TestCase):
 
         # assert schedule
         self.assertEqual(len(core.schedule.breakpoints), 5)
-        times = ["06:00", "08:00", "17:00", "20:00", "22:00"]
+        times = ["06:00", "07:00", "18:00", "20:00", "22:00"]
 
         # assert each breakpoint at time exists
         for i in range(len(core.schedule.breakpoints)):
